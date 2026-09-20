@@ -58,13 +58,30 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            -webkit-tap-highlight-color: transparent !important;
         }
         
-        input, textarea, [contenteditable="true"] {
+        input, textarea, select, [contenteditable="true"] {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        a, button, [role="button"], .btn, .portfolio-item, .web-card, .filter-btn, .project-tag, .mobile-menu-toggle, .close-modal, .close-demo {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none;
+            outline: none;
+        }
+
+        button:focus, a:focus, input:focus, textarea:focus {
+            outline: none;
+        }
+
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
         }
 
         ::selection {
@@ -1328,9 +1345,11 @@
 
         .mobile-menu-toggle {
             display: none;
-            width: 42px;
-            height: 42px;
-            background: rgba(255, 255, 255, 0.04);
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             border-radius: 50%;
             cursor: pointer;
@@ -1342,6 +1361,7 @@
             z-index: 10002;
             transition: all 0.35s var(--ease-luxury);
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent !important;
         }
         .mobile-menu-toggle:hover, .mobile-menu-toggle.active {
             border-color: var(--gold);
@@ -1364,6 +1384,11 @@
             transform: translateY(-3.5px) rotate(-45deg);
         }
 
+        .mobile-drawer-about {
+            display: none;
+            width: 100%;
+        }
+
         /* Large Tablet / Laptop (max-width: 1100px) */
         @media (max-width: 1100px) {
             header { padding: 18px 4%; }
@@ -1375,6 +1400,7 @@
         /* Tablet & Mobile Nav Drawer (max-width: 992px) */
         @media (max-width: 992px) {
             .mobile-menu-toggle { display: flex; }
+            .mobile-drawer-about { display: block; }
             header { padding: 14px 4%; }
             
             nav {
@@ -1391,41 +1417,49 @@
                 align-items: center;
                 opacity: 0;
                 visibility: hidden;
-                pointer-events: none;
+                pointer-events: none !important;
                 transform: translateY(-15px);
-                transition: opacity 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury), visibility 0.4s;
+                transition: opacity 0.3s var(--ease-luxury), transform 0.3s var(--ease-luxury), visibility 0.3s;
                 z-index: 9999;
             }
             nav.mobile-active {
                 opacity: 1;
                 visibility: visible;
-                pointer-events: auto;
+                pointer-events: auto !important;
                 transform: translateY(0);
             }
             nav ul {
                 flex-direction: column;
-                gap: 16px;
+                gap: 12px;
                 align-items: center;
                 text-align: center;
                 padding: 0;
                 width: 100%;
-                max-width: 300px;
+                max-width: 320px;
             }
             nav a {
                 font-family: 'Playfair Display', serif;
-                font-size: 1.3rem;
-                letter-spacing: 3px;
+                font-size: 1.25rem;
+                letter-spacing: 2px;
                 color: var(--text-muted);
-                padding: 10px 20px;
+                padding: 12px 20px;
                 display: block;
                 width: 100%;
                 border-radius: 12px;
-                transition: all 0.3s ease;
+                transition: all 0.25s ease;
+                -webkit-tap-highlight-color: transparent !important;
+                touch-action: manipulation;
             }
             nav a:hover, nav a.active {
                 color: var(--gold);
                 background: rgba(212, 175, 55, 0.08);
-                transform: scale(1.03);
+                transform: scale(1.02);
+            }
+            .nav-about-fz-drawer {
+                color: var(--gold) !important;
+                border: 1px solid rgba(212, 175, 55, 0.35) !important;
+                background: rgba(212, 175, 55, 0.06);
+                margin-top: 4px;
             }
             .nav-indicator { display: none !important; }
 
@@ -1520,13 +1554,23 @@
         /* Mobile Standard & Small Screens (max-width: 480px, down to 320px) */
         @media (max-width: 480px) {
             section { padding: 75px 4% 45px; }
-            header { padding: 12px 4%; }
-            .logo { font-size: clamp(1.05rem, 3.8vw, 1.25rem); letter-spacing: 0.5px; }
+            header { padding: 12px 3.5%; }
+            .header-actions-wrap { gap: 8px; }
+            .logo { font-size: clamp(1.02rem, 3.6vw, 1.2rem); letter-spacing: 0.5px; }
             
             .about-fz-link {
-                padding: 7px 12px !important;
-                font-size: 0.65rem !important;
-                letter-spacing: 1px !important;
+                padding: 8px 12px !important;
+                font-size: 0.64rem !important;
+                letter-spacing: 0.8px !important;
+                min-height: 42px;
+                display: inline-flex;
+                align-items: center;
+            }
+            .mobile-menu-toggle {
+                width: 42px;
+                height: 42px;
+                min-width: 42px;
+                min-height: 42px;
             }
             
             .intro-fz-wrap {
@@ -1551,16 +1595,18 @@
 
             .filter-nav { gap: 8px; margin-bottom: 24px; }
             .filter-btn { 
-                padding: 8px 14px; 
-                font-size: 0.68rem; 
+                padding: 10px 15px; 
+                font-size: 0.72rem; 
                 letter-spacing: 0.8px;
+                min-height: 40px;
+                touch-action: manipulation;
             }
             .portfolio-item { height: clamp(210px, 58vw, 250px); border-radius: 16px; }
             .portfolio-overlay h3 { font-size: 1.2rem; }
             .portfolio-overlay p { font-size: 0.82rem; }
 
             .project-selector { gap: 8px; margin: 20px auto; }
-            .project-tag { padding: 9px 14px; font-size: 0.68rem; letter-spacing: 0.5px; }
+            .project-tag { padding: 10px 14px; font-size: 0.72rem; letter-spacing: 0.5px; min-height: 40px; touch-action: manipulation; }
             #hire-cta-btn { 
                 padding: 14px 28px; 
                 font-size: 0.75rem; 
@@ -1589,9 +1635,11 @@
 
         /* Tiny Mobile (max-width: 360px) */
         @media (max-width: 360px) {
-            .logo { font-size: 1.0rem; }
-            .about-fz-link { padding: 6px 10px !important; font-size: 0.62rem !important; }
-            .mobile-menu-toggle { width: 38px; height: 38px; }
+            header { padding: 10px 2.5%; }
+            .logo { font-size: 0.95rem; }
+            .header-actions-wrap { gap: 6px; }
+            .about-fz-link { padding: 6px 9px !important; font-size: 0.60rem !important; }
+            .mobile-menu-toggle { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
             .service-card, .contact-card { padding: 24px 16px; }
             .project-tag { padding: 8px 12px; font-size: 0.64rem; }
             .hero-img-container { max-width: min(240px, 82vw); }
@@ -1735,15 +1783,15 @@
                 <li><a href="#home" class="magnetic active">Home</a></li>
                 <li><a href="#services" class="nav-reveal magnetic">Services</a></li>
                 <li><a href="#portfolio" class="nav-reveal magnetic">Portfolio</a></li>
-                <li><a href="#websites" class="magnetic hoverable nav-link">Websites</a></li>
+                <li><a href="#websites" class="nav-reveal magnetic hoverable">Websites</a></li>
                 <li><a href="#hire" class="nav-reveal magnetic">Hire Me</a></li>
                 <li><a href="#contact" class="nav-reveal magnetic">Contact</a></li>
+                <li class="mobile-drawer-about"><a href="about-fz.html" class="nav-about-fz-drawer">ABOUT FZ ↗</a></li>
                 <div class="nav-indicator"></div>
             </ul>
         </nav>
         <div class="header-actions-wrap">
             <a href="about-fz.html"
-               onclick="window.location.href='about-fz.html'; return true;"
                class="btn btn-fill magnetic about-fz-link"
                aria-label="About FZ"
                style="padding: 10px 22px; font-size: 0.72rem; letter-spacing: 1.5px; font-weight: 600;">
@@ -1770,7 +1818,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px; align-items: center;">
                 <div class="fade-in-up" style="display: flex; justify-content: center;">
                     <div class="hero-img-container">
-                        <img src="assets/Gemini_Generated_Image_ghws3tghws3tghws.png" alt="Faseeha Zulaika N" loading="lazy" decoding="async" style="max-width: 100%; height: auto; display: block; border-radius: 15px;">
+                        <img src="assets/Gemini_Generated_Image_ghws3tghws3tghws.webp" alt="Faseeha Zulaika N" loading="lazy" decoding="async" style="max-width: 100%; height: auto; display: block; border-radius: 15px;">
                         <div style="position: absolute; top: -10px; right: -10px; width: 40px; height: 40px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);"></div>
                     </div>
                 </div>
@@ -1856,7 +1904,7 @@
             <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="AuraFaz Fragrance Hub" data-demo-url="https://fasee9831.github.io/Perfume-ecommerce-website/" data-demo-desc="Responsive luxury e-commerce web application featuring dynamic layout structures, fragrance catalog, and booking form validation." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
                 <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
                     <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
-                    <img src="aurafaz_cover.png" alt="AuraFaz Fragrance Hub" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                    <img src="aurafaz_cover.webp" alt="AuraFaz Fragrance Hub" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
                 </div>
                 <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">AuraFaz Fragrance Hub</h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Responsive e-commerce web application featuring dynamic layout structures and booking form validation.</p>
@@ -1870,7 +1918,7 @@
             <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="ÉLVARA — Haute Horlogerie" data-demo-url="https://elvara-watch-website.faseehazulaika.workers.dev" data-demo-desc="Ultra-luxury digital atelier and interactive storytelling experience for handcrafted Haute Horlogerie timepieces featuring 3D customization and scroll-driven calibre scrubbing." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
                 <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
                     <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
-                    <img src="elvara_cover.png" alt="ÉLVARA — Manufacture de Haute Horlogerie" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(15%) brightness(0.95); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                    <img src="elvara_cover.webp" alt="ÉLVARA — Manufacture de Haute Horlogerie" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(15%) brightness(0.95); transition: filter 0.5s ease; position: relative; z-index: 1;">
                 </div>
                 <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">ÉLVARA Timepieces</h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Ultra-luxury digital atelier and interactive storytelling experience for handcrafted Haute Horlogerie timepieces.</p>
@@ -1885,7 +1933,7 @@
             <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="Porsche 911 GT3 Viewport" data-demo-url="https://porsche-gt3.onrender.com/" data-demo-desc="Immersive 3D vehicle configuration platform featuring telemetry graphics, GSAP scroll dynamics, and HTML Canvas rendering." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
                 <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
                     <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
-                    <img src="porche_cover.png" alt="Porsche 911 GT3 Viewport" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                    <img src="porche_cover.webp" alt="Porsche 911 GT3 Viewport" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
                 </div>
                 <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">Porsche 911 GT3 Viewport</h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Immersive 3D vehicle configuration platform featuring telemetry and scroll-driven video backgrounds.</p>
@@ -1965,25 +2013,25 @@
             <button class="filter-btn magnetic" data-filter="business">Business Cards</button>
         </div>
         <div class="portfolio-grid fade-in-up">
-            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/menu.png');"><div class="portfolio-overlay"><h3>Bakers Point</h3><p>Bakery Menu Design</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/poster.png');"><div class="portfolio-overlay"><h3>Blue Lady</h3><p>Poster Ad</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/chanel perfume.png');"><div class="portfolio-overlay"><h3>Chanel N°5</h3><p>Luxury Perfume Poster</p></div></div>
-            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/shawwwwwwwwweeeeeeeeeee.png');"><div class="portfolio-overlay"><h3>Shawarma Menu Card</h3><p>Restaurant Menu Design</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/mouse.png');"><div class="portfolio-overlay"><h3>AirPods Pro</h3><p>Product Poster</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/orange.png');"><div class="portfolio-overlay"><h3>Luminous Recovery</h3><p>Luxury Skincare Ad</p></div></div>
-            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/brochure.png');"><div class="portfolio-overlay"><h3>Bakery Brand Brochure</h3><p>Brand Presentation Design</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/ELVIS GLOAMING.png');"><div class="portfolio-overlay"><h3>Elvis Gloaming</h3><p>Premium Skin Care Advertisement</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/cosmo.png');"><div class="portfolio-overlay"><h3>COSMO Glow Natural</h3><p>Pure Aloe Care — Skincare Poster</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/burger.png');"><div class="portfolio-overlay"><h3>Burger Promo Poster</h3><p>Food Advertisement</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/NIKE.png');"><div class="portfolio-overlay"><h3>Nike Air Force 1</h3><p>Footwear Poster Design</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/obsidian watch.png');"><div class="portfolio-overlay"><h3>Obsidian Elite Watch</h3><p>Premium Watch Ad</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/best spprite.png');"><div class="portfolio-overlay"><h3>Feel the Fizz</h3><p>High-Impact Product Advertisement</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/coffeeposter.png');"><div class="portfolio-overlay"><h3>Sleepy Owl Coffee</h3><p>Wake Your Inner Owl — Beverage Poster</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/GUERLAIN.png');"><div class="portfolio-overlay"><h3>Rouge G by Guerlain</h3><p>Iconic Rouge G Lipstick</p></div></div>
-            <div class="portfolio-item" data-category="business" style="background-image: url('assets/busnesscard.png');"><div class="portfolio-overlay"><h3>Luxury Cards</h3><p>Business Cards</p></div></div>
-            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/PISTACHIO.png');"><div class="portfolio-overlay"><h3>Pistachio Scoop</h3><p>Crafted for True Ice Cream Lovers</p></div></div>
-            <div class="portfolio-item" data-category="business" style="background-image: url('assets/bc.png');"><div class="portfolio-overlay"><h3>Premium Business Cards</h3><p>Clean Premium Design</p></div></div>
-            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/simple brochure.png');"><div class="portfolio-overlay"><h3>Bakery Brochure</h3><p>Clean & Professional Layout</p></div></div>
+            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/menu.webp');"><div class="portfolio-overlay"><h3>Bakers Point</h3><p>Bakery Menu Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/poster.webp');"><div class="portfolio-overlay"><h3>Blue Lady</h3><p>Poster Ad</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/chanel perfume.webp');"><div class="portfolio-overlay"><h3>Chanel N°5</h3><p>Luxury Perfume Poster</p></div></div>
+            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/shawwwwwwwwweeeeeeeeeee.webp');"><div class="portfolio-overlay"><h3>Shawarma Menu Card</h3><p>Restaurant Menu Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/mouse.webp');"><div class="portfolio-overlay"><h3>AirPods Pro</h3><p>Product Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/orange.webp');"><div class="portfolio-overlay"><h3>Luminous Recovery</h3><p>Luxury Skincare Ad</p></div></div>
+            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/brochure.webp');"><div class="portfolio-overlay"><h3>Bakery Brand Brochure</h3><p>Brand Presentation Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/ELVIS GLOAMING.webp');"><div class="portfolio-overlay"><h3>Elvis Gloaming</h3><p>Premium Skin Care Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/cosmo.webp');"><div class="portfolio-overlay"><h3>COSMO Glow Natural</h3><p>Pure Aloe Care — Skincare Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/burger.webp');"><div class="portfolio-overlay"><h3>Burger Promo Poster</h3><p>Food Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/NIKE.webp');"><div class="portfolio-overlay"><h3>Nike Air Force 1</h3><p>Footwear Poster Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/obsidian watch.webp');"><div class="portfolio-overlay"><h3>Obsidian Elite Watch</h3><p>Premium Watch Ad</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/best spprite.webp');"><div class="portfolio-overlay"><h3>Feel the Fizz</h3><p>High-Impact Product Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/coffeeposter.webp');"><div class="portfolio-overlay"><h3>Sleepy Owl Coffee</h3><p>Wake Your Inner Owl — Beverage Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/GUERLAIN.webp');"><div class="portfolio-overlay"><h3>Rouge G by Guerlain</h3><p>Iconic Rouge G Lipstick</p></div></div>
+            <div class="portfolio-item" data-category="business" style="background-image: url('assets/busnesscard.webp');"><div class="portfolio-overlay"><h3>Luxury Cards</h3><p>Business Cards</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/PISTACHIO.webp');"><div class="portfolio-overlay"><h3>Pistachio Scoop</h3><p>Crafted for True Ice Cream Lovers</p></div></div>
+            <div class="portfolio-item" data-category="business" style="background-image: url('assets/bc.webp');"><div class="portfolio-overlay"><h3>Premium Business Cards</h3><p>Clean Premium Design</p></div></div>
+            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/simple brochure.webp');"><div class="portfolio-overlay"><h3>Bakery Brochure</h3><p>Clean & Professional Layout</p></div></div>
         </div>
     </section>
 
@@ -2149,18 +2197,24 @@
                 title.appendChild(frag);
             });
         }
-        setupStaggeredTitles();
-
-        // --- 3. START ANIMATION TIMING ---
-        window.addEventListener('load', function() {
+        // --- 3. START ANIMATION TIMING WITH FAST SAFE FALLBACK ---
+        let isLoadedTriggered = false;
+        function revealExperience() {
+            if (isLoadedTriggered) return;
+            isLoadedTriggered = true;
+            document.body.classList.add('loaded');
             setTimeout(() => {
-                document.body.classList.add('loaded');
-                setTimeout(() => {
-                    const heroElements = document.querySelectorAll('#home .fade-in-up, #home .shimmer-title');
-                    heroElements.forEach(el => el.classList.add('visible'));
-                }, 500);
-            }, 3500); 
+                const heroElements = document.querySelectorAll('#home .fade-in-up, #home .shimmer-title');
+                heroElements.forEach(el => el.classList.add('visible'));
+            }, 300);
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(revealExperience, 2000);
         });
+        window.addEventListener('load', () => {
+            setTimeout(revealExperience, 1200);
+        });
+        setTimeout(revealExperience, 2800);
 
         // --- 4. SCROLL ANIMATIONS (REPEATING ON EVERY SECTION VISIT) ---
         const observerOptions = { threshold: 0.08, rootMargin: "0px 0px -25px 0px" };
@@ -2924,10 +2978,11 @@
         }
 
         let isNavigating = false;
+        let navTimeout = null;
         let currentSectionKey = 'home';
 
         function showSingleSection(targetId) {
-            if (!targetId || !targetId.startsWith('#') || isNavigating) return;
+            if (!targetId || !targetId.startsWith('#')) return;
             const targetSection = document.querySelector(targetId);
             if (!targetSection) return;
 
@@ -2939,17 +2994,18 @@
             const activeSections = Array.from(document.querySelectorAll('section')).filter(s => getComputedStyle(s).display !== 'none');
             
             if (activeSections.length > 0 && activeSections[0] !== targetSection) {
+                if (navTimeout) clearTimeout(navTimeout);
                 isNavigating = true;
                 const currentSec = activeSections[0];
                 
                 currentSec.style.opacity = '0';
-                currentSec.style.transform = 'translateY(15px)';
+                currentSec.style.transform = 'translateY(10px)';
 
-                setTimeout(() => {
+                navTimeout = setTimeout(() => {
                     document.querySelectorAll('section').forEach(sec => {
                         sec.style.display = 'none';
                         sec.style.opacity = '0';
-                        sec.style.transform = 'translateY(25px)';
+                        sec.style.transform = 'translateY(15px)';
                     });
 
                     targetSection.style.display = 'flex';
@@ -2960,17 +3016,20 @@
 
                     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                    targetSection.querySelectorAll('.fade-in-up, .slide-from-right, .animate-words, .shimmer-title, .service-card, .tilt-card, .stagger-title').forEach(el => {
+                    targetSection.querySelectorAll('.fade-in-up, .slide-from-right, .animate-words, .shimmer-title, .service-card, .tilt-card, .stagger-title, .web-card').forEach(el => {
                         el.classList.add('visible');
                     });
 
-                    setTimeout(() => { isNavigating = false; }, 400);
-                }, 350);
+                    isNavigating = false;
+                }, 180);
             } else {
                 targetSection.style.display = 'flex';
                 targetSection.style.opacity = '1';
                 targetSection.style.transform = 'translateY(0)';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                targetSection.querySelectorAll('.fade-in-up, .slide-from-right, .animate-words, .shimmer-title, .service-card, .tilt-card, .stagger-title, .web-card').forEach(el => {
+                    el.classList.add('visible');
+                });
             }
         }
 
@@ -3001,7 +3060,7 @@
             });
         }
 
-        document.querySelectorAll('.nav-reveal, nav a').forEach(link => {
+        document.querySelectorAll('.nav-reveal, nav a:not(.nav-about-fz-drawer)').forEach(link => {
             link.addEventListener('click', function(e) {
                 const targetId = this.getAttribute('href');
                 if (
@@ -3017,7 +3076,7 @@
         });
 
         // Direct explicit handler for ABOUT FZ ↗ navigation
-        document.querySelectorAll('.about-fz-link').forEach(btn => {
+        document.querySelectorAll('.about-fz-link, .nav-about-fz-drawer').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 closeMobileNav();
@@ -3231,9 +3290,6 @@
                 e.preventDefault();
                 openPortfolioModal(this);
             });
-            item.addEventListener('touchend', function() {
-                openPortfolioModal(this);
-            }, { passive: true });
         });
         if (closeAdModalBtn) {
             closeAdModalBtn.addEventListener('click', closePortfolioModal);
@@ -3269,12 +3325,6 @@
                 const desc = this.getAttribute('data-demo-desc');
                 openDemoModal(url, title, desc);
             });
-            card.addEventListener('touchend', function() {
-                const url = this.getAttribute('data-demo-url');
-                const title = this.getAttribute('data-demo-title');
-                const desc = this.getAttribute('data-demo-desc');
-                openDemoModal(url, title, desc);
-            }, { passive: true });
         });
         const closeDemo = document.querySelector('.close-demo');
         if (closeDemo) {

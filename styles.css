@@ -17,12 +17,26 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent !important;
 }
-input, textarea, [contenteditable="true"] {
+input, textarea, select, [contenteditable="true"] {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
+  -webkit-tap-highlight-color: transparent !important;
+}
+a, button, [role="button"], .btn, .nav-link, .drawer-link, .tile, .card {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none;
+  outline: none;
+}
+button:focus, a:focus, input:focus, textarea:focus {
+  outline: none;
+}
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 ::selection {
   background: transparent;

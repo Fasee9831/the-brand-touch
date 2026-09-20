@@ -35,13 +35,30 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            -webkit-tap-highlight-color: transparent !important;
         }
         
-        input, textarea, [contenteditable="true"] {
+        input, textarea, select, [contenteditable="true"] {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        a, button, [role="button"], .btn, .back-link, .hero-grand-tag {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none;
+            outline: none;
+        }
+
+        button:focus, a:focus, input:focus, textarea:focus {
+            outline: none;
+        }
+
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
         }
 
         ::selection {
@@ -947,16 +964,16 @@
 
     <!-- HEADER NAVIGATION -->
     <header>
-        <a href="stunning.html" class="logo-link" title="The Brand Touch Home">
+        <a href="index.html" class="logo-link" title="The Brand Touch Home">
             <div class="logo">The Brand Touch</div>
         </a>
         <div class="header-actions">
-            <a href="stunning.html#portfolio" class="btn magnetic header-portfolio-btn" style="padding: 8px 18px; font-size: 0.7rem; border-color: rgba(212,175,55,0.4);">PORTFOLIO ↗</a>
-            <a href="stunning.html#hire" class="btn btn-fill magnetic header-hire-btn" style="padding: 8px 20px; font-size: 0.7rem;">
+            <a href="index.html#portfolio" class="btn magnetic header-portfolio-btn" style="padding: 8px 18px; font-size: 0.7rem; border-color: rgba(212,175,55,0.4);">PORTFOLIO ↗</a>
+            <a href="index.html#hire" class="btn btn-fill magnetic header-hire-btn" style="padding: 8px 20px; font-size: 0.7rem;">
                 <span class="hire-text-full">START A PROJECT ↗</span>
                 <span class="hire-text-short">START ↗</span>
             </a>
-            <a href="stunning.html" class="back-link magnetic" title="Return to Main Website" aria-label="Back to main website">
+            <a href="index.html" class="back-link magnetic" title="Return to Main Website" aria-label="Back to main website">
                 <span>←</span> <span class="back-text-full">BACK TO MAIN</span><span class="back-text-short">BACK</span>
             </a>
         </div>

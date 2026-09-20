@@ -2,12 +2,12 @@
 // Portfolio Items
 // ==========================
 const portfolioItems = [
-    {category: "menu", title: "Bakery Menu", image: "assets/menu.png"},
-    {category: "posters", title: "AirPods Poster", image: "assets/AIRPODS PRO.png"},
-    {category: "posters", title: "Blue Lady Perfume Poster", image: "assets/poster.png"}, 
-    {category: "posters", title: "Gaming Mouse Poster", image: "assets/mouse.png"},
-    {category: "business", title: "Business Card - Bakers Point", image: "assets/busnesscard.png"},
-    {category: "brochures", title: "Marketing Brochure", image: "assets/brochure.png"},
+    {category: "menu", title: "Bakery Menu", image: "assets/menu.webp"},
+    {category: "posters", title: "AirPods Poster", image: "assets/AIRPODS PRO.webp"},
+    {category: "posters", title: "Blue Lady Perfume Poster", image: "assets/poster.webp"}, 
+    {category: "posters", title: "Gaming Mouse Poster", image: "assets/mouse.webp"},
+    {category: "business", title: "Business Card - Bakers Point", image: "assets/busnesscard.webp"},
+    {category: "brochures", title: "Marketing Brochure", image: "assets/brochure.webp"},
 ];
 
 const grid = document.getElementById('portfolio-grid');

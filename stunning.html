@@ -1,0 +1,3964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Brand Touch | Graphic Designer & Web Developer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(18, 18, 18, 0.55);
+            --card-bg-hover: rgba(25, 24, 20, 0.7);
+            --gold: #d4af37;
+            --gold-bright: #ffd700;
+            --gold-dim: #aa8c2c;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --glass-border-hover: rgba(212, 175, 55, 0.45);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        input, textarea, [contenteditable="true"] {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        ::selection {
+            background: transparent;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: transparent;
+            color: inherit;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        h1, h2, h3, h4, .intro-title, .shimmer-title { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 600; 
+            letter-spacing: -0.01em;
+        }
+
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+
+        /* --- LUXURY SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #1f1a0e 0%, var(--gold-dim) 50%, #1f1a0e 100%);
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        /* --- CUSTOM LUXURY CURSOR --- */
+        .custom-cursor-dot {
+            width: 8px; height: 8px; background: var(--gold);
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none !important; z-index: 10000;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transition: opacity 0.3s;
+        }
+        .custom-cursor-ring {
+            width: 38px; height: 38px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none !important; z-index: 9999;
+            backdrop-filter: blur(2px);
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform, width, height;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transition: width 0.35s var(--ease-luxury), height 0.35s var(--ease-luxury), border-color 0.3s, background-color 0.3s;
+        }
+        body.cursor-hover .custom-cursor-ring {
+            width: 62px; height: 62px;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.08);
+            pointer-events: none !important;
+        }
+
+        /* --- UNIFIED CINEMATIC BACKGROUND SYSTEM --- */
+        #dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+            background: #050505;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        #video-bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            z-index: 0;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        #video-bg-layer.active-video {
+            opacity: 1;
+        }
+
+        #bg-brand-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(0.4) contrast(1.15) saturate(1.1);
+            transform: scale(1.05);
+            transition: filter 0.8s ease;
+        }
+
+        .video-overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.85) 100%),
+                        linear-gradient(to bottom, rgba(5,5,5,0.6) 0%, rgba(5,5,5,0.7) 50%, rgba(5,5,5,0.9) 100%);
+            pointer-events: none;
+        }
+
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-glow-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 40%), var(--glow-color, rgba(212, 175, 55, 0.06)) 0%, transparent 65%);
+            transition: background 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.4s ease;
+            mix-blend-mode: screen;
+            opacity: 0.85;
+            z-index: 2;
+        }
+
+        .bg-vignette-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 35%, rgba(5, 5, 5, 0.55) 70%, #050505 100%),
+                        linear-gradient(to bottom, rgba(5, 5, 5, 0.4) 0%, transparent 20%, transparent 80%, rgba(5, 5, 5, 0.7) 100%);
+            z-index: 3;
+        }
+
+        /* --- CINEMATIC INTRO UPGRADE --- */
+        #intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+            transition: opacity 1.2s var(--ease-luxury), visibility 1.2s;
+        }
+
+        .intro-dust {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: -1;
+        }
+        .dust-dot {
+            position: absolute; background: var(--gold); border-radius: 50%;
+            opacity: 0; animation: dustFloat 4s ease-in-out infinite;
+        }
+        @keyframes dustFloat {
+            0% { transform: translateY(100px) scale(0); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        .intro-content { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
+
+        /* --- FZ CALLIGRAPHIC MONOGRAM REVEAL --- */
+        .intro-fz-wrap {
+            position: relative;
+            width: 148px;
+            height: 84px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.96) translateZ(0);
+            filter: blur(3px);
+            will-change: transform, opacity, filter;
+            animation: fzMonogramEntrance 1.5s var(--ease-luxury) 0.1s forwards,
+                       fzLivingPulse 4s ease-in-out 1.6s infinite;
+        }
+
+        .intro-fz-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.7));
+        }
+
+        .fz-ambient-ghost {
+            opacity: 0;
+            filter: brightness(0.7) blur(1px);
+            animation: ghostEmerge 1.2s ease-out 0.15s forwards;
+        }
+
+        @keyframes ghostEmerge {
+            0% { opacity: 0; }
+            100% { opacity: 0.18; }
+        }
+
+        /* Calligraphic Stroke Drawing Mask Animation */
+        .draw-path {
+            stroke-dasharray: 480;
+            stroke-dashoffset: 480;
+        }
+
+        .draw-path.path-1 {
+            stroke-dasharray: 450;
+            stroke-dashoffset: 450;
+            animation: drawStroke 1.0s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+        }
+
+        .draw-path.path-2 {
+            stroke-dasharray: 340;
+            stroke-dashoffset: 340;
+            animation: drawStroke 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+        }
+
+        .draw-path.path-3 {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawStroke 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+        }
+
+        .draw-path.path-4 {
+            stroke-dasharray: 280;
+            stroke-dashoffset: 280;
+            animation: drawStroke 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+        }
+
+        .draw-path.path-5 {
+            stroke-dasharray: 360;
+            stroke-dashoffset: 360;
+            animation: drawStroke 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
+        }
+
+        .mask-full-reveal {
+            opacity: 0;
+            animation: maskFullReveal 0.55s ease-out 1.15s forwards;
+        }
+
+        @keyframes drawStroke {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes maskFullReveal {
+            to { opacity: 1; }
+        }
+
+        @keyframes fzMonogramEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+                filter: blur(3px) drop-shadow(0 0 0px rgba(212, 175, 55, 0));
+            }
+            60% {
+                opacity: 1;
+                filter: blur(0px) drop-shadow(0 0 14px rgba(212, 175, 55, 0.45));
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0px) drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
+            }
+        }
+
+        @keyframes fzLivingPulse {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+                filter: blur(0px) drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
+            }
+            50% {
+                transform: translateY(-3px) scale(1.015);
+                filter: blur(0px) drop-shadow(0 0 18px rgba(212, 175, 55, 0.65)) drop-shadow(0 0 28px rgba(255, 215, 0, 0.25));
+            }
+        }
+
+        /* Subtle Metallic Light Sweep from Left to Right */
+        .fz-shine-sweep {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 4px;
+            -webkit-mask-image: url('assets/fz_monogram.png');
+            mask-image: url('assets/fz_monogram.png');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            opacity: 0;
+            animation: sheenPassFZ 1.2s ease-in-out 1.7s forwards;
+        }
+
+        .fz-shine-sweep::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -100%;
+            width: 80%;
+            height: 140%;
+            background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 230, 150, 0.95) 55%, transparent 80%);
+            transform: skewX(-25deg);
+            animation: sweepMove 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.7s forwards;
+        }
+
+        @keyframes sheenPassFZ {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes sweepMove {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        /* Sparkle Accents Reveal */
+        .fz-sparkle {
+            position: absolute;
+            color: var(--gold-bright);
+            font-size: 0.75rem;
+            line-height: 1;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
+        }
+
+        .fz-sparkle.sp-top-right {
+            top: 3px;
+            right: 5px;
+            font-size: 0.95rem;
+            animation: sparkleTwinkle 1.4s ease-out 1.85s forwards;
+        }
+
+        .fz-sparkle.sp-inner {
+            top: 42px;
+            left: 48%;
+            font-size: 0.65rem;
+            animation: sparkleTwinkle 1.4s ease-out 2.05s forwards;
+        }
+
+        @keyframes sparkleTwinkle {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-20deg);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.3) rotate(15deg);
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 1));
+            }
+            70% {
+                opacity: 0.9;
+                transform: scale(0.95) rotate(0deg);
+            }
+            100% {
+                opacity: 0.85;
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.6));
+            }
+        }
+
+        .intro-text-mask { overflow: hidden; margin-bottom: 15px; position: relative; }
+
+        .intro-title {
+            font-size: 1.4rem; letter-spacing: 8px; text-transform: uppercase;
+            color: transparent; position: relative; display: flex;
+        }
+        
+        .intro-title span {
+            display: inline-block;
+            transform: translateY(110%);
+            opacity: 0;
+            background: linear-gradient(135deg, #be9336 0%, #d4af37 25%, #f5e6b8 42%, #ffffff 50%, #f5e6b8 58%, #d4af37 75%, #be9336 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: letterRise 1.2s var(--ease-luxury) forwards, metalShine 3s linear infinite;
+        }
+
+        .intro-line {
+            width: 0; height: 1px; 
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            opacity: 0;
+            animation: lineDraw 1.5s var(--ease-luxury) 2s forwards;
+        }
+
+        @keyframes letterRise {
+            0% { transform: translateY(110%); opacity: 0; filter: blur(4px); }
+            100% { transform: translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes metalShine { 
+            0% { background-position: -200%; } 
+            100% { background-position: 200%; } 
+        }
+        @keyframes lineDraw { 
+            0% { width: 0; opacity: 0; } 
+            50% { opacity: 1; }
+            100% { width: 140px; opacity: 0.6; } 
+        }
+
+        body.loaded #intro-overlay { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; display: none !important; }
+        body.loaded .intro-content { transform: scale(1.1); filter: blur(10px); opacity: 0; transition: all 1s ease; pointer-events: none !important; }
+
+        /* --- STAGGERED HEADINGS & TYPOGRAPHY REVEALS --- */
+        .mask-container { overflow: hidden; display: block; margin-bottom: 5px; }
+        .reveal-text { 
+            display: block; 
+            transform: translateY(120%) rotate(2deg); 
+            opacity: 0; 
+            transition: transform 1.5s var(--ease-luxury), opacity 1.5s var(--ease-luxury); 
+            transform-origin: left center; 
+        }
+        body.loaded .reveal-text { transform: translateY(0) rotate(0deg); opacity: 1; }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.3s; }
+
+        .expand-tracking { opacity: 0; letter-spacing: 0px; filter: blur(5px); transition: all 1.8s var(--ease-luxury); }
+        body.loaded .expand-tracking { opacity: 1; letter-spacing: 8px; filter: blur(0px); }
+
+        .draw-line-vertical {
+            width: 1px; height: 0; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            margin: 40px auto; opacity: 0.4;
+            transition: height 1.5s cubic-bezier(0.77, 0, 0.175, 1); transition-delay: 0.8s;
+        }
+        body.loaded .draw-line-vertical { height: 100px; }
+
+        .animate-words { opacity: 1; }
+        .animate-words span { 
+            display: inline-block; white-space: pre; opacity: 0; 
+            transform: translateY(40px) skewY(5deg); 
+            transition: opacity 0.9s var(--ease-luxury), transform 0.9s var(--ease-luxury); 
+            will-change: transform, opacity; 
+        }
+        .animate-words.visible span { opacity: 1; transform: translateY(0) skewY(0deg); }
+
+        .stagger-title span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%) rotateX(-45deg);
+            transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury);
+            transform-origin: bottom center;
+            will-change: opacity, transform;
+        }
+        .stagger-title.visible span {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+
+        /* --- HEADER & FLUID NAV INDICATOR --- */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            z-index: 10000; border-bottom: 1px solid var(--glass-border);
+            opacity: 0; transform: translateY(-20px); transition: opacity 0.8s var(--ease-luxury) 0.3s, transform 0.8s var(--ease-luxury) 0.3s;
+            pointer-events: auto !important;
+        }
+        body.loaded header { opacity: 1; transform: translateY(0); }
+
+        .about-fz-link {
+            position: relative;
+            z-index: 10001 !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            user-select: none;
+        }
+        .about-fz-link * {
+            pointer-events: none !important;
+        }
+        .about-fz-link .cta-arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .about-fz-link:hover .cta-arrow {
+            transform: translate(2px, -2px);
+        }
+
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+        nav { position: relative; }
+        nav ul { display: flex; gap: 30px; position: relative; }
+        nav a { 
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; 
+            color: var(--text-muted); position: relative; display: inline-block; 
+            padding: 5px 0; transition: color 0.4s var(--ease-luxury);
+        }
+        nav a:hover, nav a.active { color: var(--gold); }
+        .nav-indicator {
+            position: absolute; bottom: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            box-shadow: 0 0 12px var(--gold);
+            border-radius: 2px;
+            transition: all 0.5s var(--ease-luxury);
+            pointer-events: none;
+        }
+
+        /* --- SECTIONS & TRANSITIONS --- */
+        section { 
+            padding: 100px 10%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; 
+            transition: opacity 0.5s var(--ease-luxury), transform 0.5s var(--ease-luxury);
+        }
+        #services, #portfolio, #websites, #hire, #contact { display: none; opacity: 0; transform: translateY(25px); }
+
+        .section-title { text-align: center; font-size: 3.2rem; margin-bottom: 2rem; color: var(--text-main); line-height: 1.2; }
+        .section-subtitle, .hero-subtitle { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 8px; font-size: 0.9rem; margin-bottom: 1rem; display: block; }
+        #home { text-align: center; padding-top: 150px; position: relative; }
+
+        .shimmer-text, .shimmer-title { 
+            font-family: 'Playfair Display', serif; font-weight: 600; font-size: 5rem; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 30px; 
+            background: linear-gradient(to right, #ffffff 20%, #888888 50%, #ffffff 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+        #contact .shimmer-title { font-size: 4rem; margin-bottom: 10px; }
+        #hire .shimmer-title { font-size: 3.5rem; margin-bottom: 20px; }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .shimmer-text em, .shimmer-title em { 
+            font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; display: block; margin-top: 10px; letter-spacing: 0px;
+            background: linear-gradient(90deg, #d4af37, #ffffff, #d4af37);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: textShimmer 3s infinite linear;
+        }
+        @keyframes textShimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+        .designer-name { font-size: 3.5rem; margin-top: 10px; font-family: 'Playfair Display', serif; letter-spacing: -2px; transition: letter-spacing 1.5s var(--ease-luxury); }
+        .visible .designer-name { letter-spacing: 2px; }
+
+        /* --- HERO FLOATING IMAGE & CARDS GLASSMORPHISM --- */
+        .hero-img-container {
+            background: var(--bg-color); padding: 15px; border-radius: 24px; position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 35px rgba(212, 175, 55, 0.12), inset 0 1px 1px rgba(255,255,255,0.15);
+            border: 1px solid var(--glass-border);
+            animation: heroFloat 6s ease-in-out infinite;
+        }
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(0.5deg); }
+        }
+
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; perspective: 1000px; }
+        
+        .service-card, .contact-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 45px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 0 15px rgba(212, 175, 55, 0.02);
+            transition: transform 0.4s var(--ease-luxury), box-shadow 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury), background 0.4s var(--ease-luxury); 
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column; transform-style: preserve-3d;
+            will-change: transform, box-shadow;
+        }
+        .service-card:hover, .contact-card:hover { 
+            border-color: var(--glass-border-hover); 
+            background: var(--card-bg-hover); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 0 35px var(--gold-glow); 
+        }
+        .service-card::before { 
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; 
+            background: linear-gradient(90deg, transparent, var(--gold), transparent); 
+            transform: translateX(-100%); transition: transform 0.6s var(--ease-luxury); 
+        }
+        .service-card:hover::before { transform: translateX(100%); }
+        .service-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: var(--gold); letter-spacing: 1px; transform: translateZ(20px); transition: color 0.3s ease; }
+        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; transform: translateZ(10px); line-height: 1.7; }
+        .service-card ul li { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .service-card ul li::before { content: '→'; color: var(--gold); font-size: 0.7rem; }
+
+        .filter-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 50px; }
+        .filter-btn { 
+            background: rgba(18, 18, 18, 0.4); border: 1px solid var(--glass-border); 
+            color: var(--text-muted); padding: 10px 25px; text-transform: uppercase; font-size: 0.75rem; 
+            transition: var(--transition); border-radius: 50px; cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        .filter-btn:hover, .filter-btn.active { 
+            border-color: var(--gold); color: var(--gold); 
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); 
+        }
+        
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .portfolio-item { 
+            height: 300px; position: relative; overflow: hidden; border-radius: 24px; 
+            background-size: cover; background-position: center; border: 1px solid var(--glass-border); cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: var(--transition);
+        }
+        .portfolio-item:hover { 
+            border-color: var(--glass-border-hover); 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.7), 0 0 25px var(--gold-glow); 
+        }
+        .portfolio-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(5,5,5,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            padding: 20px; text-align: center;
+            opacity: 0; pointer-events: none; transition: var(--transition); 
+        }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-overlay h3 { 
+            color: var(--gold); font-size: 1.5rem; margin-bottom: 8px; font-family: 'Playfair Display', serif;
+            transform: translateY(15px); transition: 0.4s var(--ease-luxury); 
+        }
+        .portfolio-overlay p { 
+            color: #ffffff; font-size: 0.95rem; margin: 0;
+            transform: translateY(15px); transition: 0.4s var(--ease-luxury); 
+        }
+        .portfolio-item:hover .portfolio-overlay h3,
+        .portfolio-item:hover .portfolio-overlay p,
+        .portfolio-item:hover h3 { 
+            transform: translateY(0); 
+        }
+
+        .btn { 
+            padding: 15px 35px; border: 1px solid var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; 
+            transition: var(--transition); background: transparent; color: var(--text-main); display: inline-block;
+            border-radius: 50px; cursor: pointer; position: relative; z-index: 1;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+        .btn:hover { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); border-color: var(--gold-bright); }
+        .btn-fill { background: var(--gold); color: #000; font-weight: 600; border-radius: 50px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+        .btn-fill:hover { background: var(--gold-bright); box-shadow: 0 0 35px rgba(212, 175, 55, 0.5); }
+        
+        .fade-in-up { opacity: 0; transform: translateY(-40px); transition: all 1.2s var(--ease-luxury); }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+        .slide-from-right { opacity: 0; transform: translateX(80px); transition: all 1.2s var(--ease-luxury); }
+        .slide-from-right.visible { opacity: 1; transform: translateX(0); }
+
+        /* --- MODALS & OVERLAYS GLASS UI --- */
+        #contact-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.98); z-index: 200000; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; transition: opacity 0.35s ease;
+        }
+        #contact-overlay .close-contact,
+        .contact-overlay-close { 
+            position: absolute; top: 30px; right: 40px; 
+            color: #fff; font-size: 3rem; 
+            background: transparent; border: none; outline: none; padding: 0;
+            line-height: 1; cursor: pointer; 
+            z-index: 200010; pointer-events: auto !important;
+            transition: color 0.3s ease;
+        }
+        #contact-overlay .close-contact:hover,
+        .contact-overlay-close:hover { 
+            color: var(--gold); 
+        }
+
+        #ad-modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(4, 4, 6, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); 
+            z-index: 200000; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; transition: opacity 0.35s var(--ease-luxury); padding: 20px;
+            cursor: pointer;
+        }
+        #ad-modal.open { opacity: 1; }
+        .ad-modal-content {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            max-width: 90vw; max-height: 88vh; position: relative; text-align: center;
+            animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            cursor: default; pointer-events: auto;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.94) translateY(15px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .ad-img-wrapper {
+            max-height: 70vh; display: flex; align-items: center; justify-content: center;
+        }
+        #ad-modal img { 
+            max-width: 85vw; max-height: 68vh; object-fit: contain;
+            border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 18px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95), 0 0 35px rgba(212, 175, 55, 0.2); 
+            transition: transform 0.3s ease;
+        }
+        .ad-info-box {
+            margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        #ad-title {
+            color: var(--gold); font-size: 1.5rem; font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px; margin: 0;
+        }
+        #ad-subtitle {
+            color: var(--text-muted); font-size: 0.88rem; margin: 0; letter-spacing: 0.5px;
+        }
+        #ad-modal .close-modal { 
+            position: absolute; top: 25px; right: 35px; color: rgba(255,255,255,0.85); 
+            font-size: 2.4rem; cursor: pointer !important; transition: all 0.3s ease; line-height: 1;
+            width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(212, 175, 55, 0.3); z-index: 200010;
+            pointer-events: auto !important; user-select: none; outline: none; padding: 0;
+        }
+        #ad-modal .close-modal:hover { 
+            color: var(--gold); border-color: var(--gold); background: rgba(212, 175, 55, 0.25);
+            transform: rotate(90deg) scale(1.1); box-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
+        }
+
+        .close-demo {
+            position: fixed;
+            top: 25px;
+            right: 35px;
+
+            width: 50px;
+            height: 50px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+            margin: 0;
+
+            color: #fff;
+            background: rgba(10,10,10,0.9);
+
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 50%;
+
+            font-size: 28px;
+            line-height: 1;
+
+            cursor: pointer;
+
+            z-index: 200015;
+            pointer-events: auto;
+
+            transition:
+                color 0.3s ease,
+                background 0.3s ease,
+                border-color 0.3s ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .close-demo:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+            background: rgba(212,175,55,0.22);
+            transform: rotate(90deg) scale(1.08);
+            box-shadow: 0 0 20px rgba(212,175,55,0.45);
+        }
+
+        .close-demo:active {
+            transform: rotate(90deg) scale(0.95);
+        }
+
+        .close-demo-inline {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #ffffff;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            line-height: 1;
+            transition: all 0.3s ease;
+            user-select: none;
+            outline: none;
+        }
+        .close-demo-inline:hover {
+            background: rgba(212,175,55,0.25);
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: rotate(90deg);
+        }
+
+        .magnetic { display: inline-block; transition: transform 0.25s var(--ease-spring); }
+
+        /* --- LUXURY AI CHATBOT SYSTEM (FZ ASSISTANT) --- */
+        #chat-widget { 
+            position: fixed; 
+            bottom: 24px; 
+            right: 24px; 
+            z-index: 4000; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-end; 
+            pointer-events: none;
+        }
+        #chat-widget > * {
+            pointer-events: auto;
+        }
+        
+        #chat-bubble {
+            width: 58px; height: 58px; background: linear-gradient(135deg, var(--gold) 0%, #b8973b 100%);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4), 0 0 15px rgba(212, 175, 55, 0.2); 
+            transition: transform 0.4s var(--ease-spring), box-shadow 0.3s ease;
+            z-index: 4001; position: relative; flex-shrink: 0;
+        }
+        #chat-bubble:hover { transform: scale(1.08) rotate(5deg); box-shadow: 0 14px 40px rgba(212, 175, 55, 0.6); }
+        
+        .chat-unread-badge {
+            position: absolute; top: -3px; right: -3px; width: 22px; height: 22px;
+            background: #ff3b30; color: #fff; border-radius: 50%;
+            font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(255, 59, 48, 0.6); border: 2px solid #000;
+            animation: badgePulse 2s infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .chat-tooltip {
+            position: absolute; right: 72px; background: rgba(15, 15, 18, 0.95);
+            color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 7px 14px; border-radius: 20px; font-size: 0.78rem; white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6); pointer-events: none; opacity: 0;
+            transform: translateX(10px); transition: all 0.3s ease;
+        }
+        #chat-bubble:hover .chat-tooltip { opacity: 1; transform: translateX(0); }
+        
+        #chat-window {
+            width: min(390px, calc(100vw - 32px));
+            height: min(540px, calc(100dvh - 105px));
+            max-height: calc(100dvh - 105px);
+            background: rgba(10, 10, 13, 0.96);
+            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); 
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            border-radius: 20px; margin-bottom: 12px; 
+            opacity: 0; transform: translateY(12px) scale(0.98); pointer-events: none; visibility: hidden;
+            display: flex; flex-direction: column; overflow: hidden; 
+            box-shadow: 0 25px 65px rgba(0,0,0,0.85), inset 0 1px 2px rgba(255,255,255,0.12), 0 0 35px rgba(212, 175, 55, 0.12);
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+        }
+        #chat-window.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; visibility: visible; }
+        
+        #chat-header {
+            height: 60px; min-height: 60px; flex-shrink: 0; padding: 10px 16px;
+            background: linear-gradient(to right, rgba(212, 175, 55, 0.14), rgba(20, 20, 24, 0.9));
+            border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+            display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;
+        }
+        .chat-header-info { display: flex; align-items: center; gap: 10px; }
+        .chat-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: radial-gradient(circle, var(--gold) 0%, #8a6f27 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: #000; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.35); flex-shrink: 0;
+        }
+        .chat-online-dot {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #27c93f; box-shadow: 0 0 8px rgba(39, 201, 63, 0.8);
+            animation: onlinePulse 2.5s infinite ease-in-out; margin-right: 4px; vertical-align: middle;
+        }
+        @keyframes onlinePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+        .chat-header-actions { display: flex; align-items: center; gap: 6px; }
+        .chat-icon-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted); width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 0.8rem; transition: all 0.2s ease;
+        }
+        .chat-icon-btn:hover { background: rgba(212, 175, 55, 0.2); color: var(--gold); border-color: var(--gold); }
+
+        #chat-messages {
+            flex: 1; min-height: 0; padding: 16px; overflow-y: auto; overflow-x: hidden;
+            display: flex; flex-direction: column; gap: 12px;
+            scroll-behavior: smooth; box-sizing: border-box;
+        }
+        #chat-messages::-webkit-scrollbar { width: 5px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
+        
+        .message {
+            padding: 11px 15px; border-radius: 16px; font-size: 0.84rem; max-width: 88%;
+            line-height: 1.5; animation: messagePop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; transform: translateY(8px); position: relative; word-wrap: break-word;
+        }
+        @keyframes messagePop { to { opacity: 1; transform: translateY(0); } }
+        
+        .bot-msg {
+            background: rgba(22, 22, 28, 0.88); color: #f0f0f0; align-self: flex-start;
+            border-bottom-left-radius: 4px; border: 1px solid rgba(212, 175, 55, 0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .user-msg {
+            background: linear-gradient(135deg, var(--gold) 0%, #c49d32 100%);
+            color: #050505; align-self: flex-end; border-bottom-right-radius: 4px;
+            font-weight: 500; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+        }
+        .msg-time {
+            font-size: 0.65rem; opacity: 0.55; margin-top: 5px; display: block; text-align: right;
+        }
+        .user-msg .msg-time { color: rgba(0,0,0,0.6); }
+
+        .chat-followup-container {
+            margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        .chat-followup-title {
+            font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px;
+        }
+        .chat-followup-chips {
+            display: flex; flex-wrap: wrap; gap: 6px;
+        }
+        .chat-followup-chips .chat-action-btn {
+            opacity: 0; transform: translateY(6px);
+            animation: chipPopUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: var(--chip-delay, 0ms);
+        }
+        @keyframes chipPopUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-action-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 6px 12px; border-radius: 18px; font-size: 0.74rem; font-weight: 600;
+            background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.35);
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; user-select: none;
+        }
+        .chat-action-btn:hover {
+            background: var(--gold); color: #000; box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            transform: translateY(-1px);
+        }
+        .chat-action-btn:active {
+            transform: scale(0.96);
+        }
+        .chat-action-btn.btn-primary {
+            background: var(--gold); color: #000;
+        }
+        .chat-action-btn.btn-primary:hover {
+            background: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.4);
+        }
+
+        .chat-tag {
+            display: inline-block; background: rgba(212,175,55,0.18); color: var(--gold);
+            font-size: 0.68rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; font-weight: 600;
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+
+        .price-table {
+            width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.78rem;
+        }
+        .price-table td {
+            padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .price-table td:last-child {
+            text-align: right; color: var(--gold); font-weight: 600;
+        }
+
+        /* --- LUXURY CHATBOT SERVICES CARDS UI --- */
+        .chat-services-container {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .chat-services-intro {
+            font-size: 0.82rem;
+            color: #e2e2e2;
+            line-height: 1.45;
+            margin-bottom: 5px;
+        }
+        .chat-service-card {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            padding: 9px 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            text-decoration: none;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .chat-service-card:hover {
+            background: rgba(212, 175, 55, 0.09);
+            border-color: var(--gold);
+            transform: translateX(3px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(212, 175, 55, 0.08);
+        }
+        .chat-service-icon {
+            font-size: 1.15rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .chat-service-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .chat-service-name {
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            letter-spacing: 0.3px;
+        }
+        .chat-service-name .service-arrow {
+            font-size: 0.72rem;
+            opacity: 0.6;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .chat-service-card:hover .service-arrow {
+            opacity: 1;
+            transform: translate(2px, -2px);
+            color: var(--gold-bright);
+        }
+        .chat-service-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Project Brief Luxury Card */
+        .project-brief-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 10px 0;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.03);
+        }
+        .project-brief-card h5 {
+            color: var(--gold);
+            font-size: 0.82rem;
+            margin: 6px 0 3px 0;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            padding-bottom: 2px;
+        }
+        .project-brief-card h5:first-child { margin-top: 0; }
+        .project-brief-card ul {
+            margin: 4px 0 6px 14px;
+            padding: 0;
+        }
+        .project-brief-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 2px 0;
+        }
+        .project-brief-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .project-brief-val {
+            color: #fff;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: none; align-self: flex-start; background: rgba(22, 22, 28, 0.88);
+            padding: 10px 16px; border-radius: 16px; border-bottom-left-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.15); gap: 5px; align-items: center;
+        }
+        .typing-indicator.active { display: flex; }
+        .typing-dot {
+            width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
+            animation: typingBounce 1.2s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+
+        #chat-input-area {
+            flex-shrink: 0; padding: 12px 16px; background: rgba(15, 15, 18, 0.95);
+            border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px; align-items: center;
+            box-sizing: border-box;
+        }
+        #chat-input {
+            flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50px; padding: 10px 18px; color: #fff; outline: none; font-family: inherit;
+            font-size: 0.82rem; transition: border-color 0.3s ease, background 0.3s ease;
+        }
+        #chat-input:focus {
+            border-color: var(--gold); background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        #chat-input::placeholder { color: rgba(255, 255, 255, 0.35); font-size: 0.8rem; }
+        #send-chat {
+            width: 38px; height: 38px; border-radius: 50%; background: var(--gold);
+            border: none; color: #000; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.25s ease; flex-shrink: 0;
+        }
+        #send-chat:hover {
+            transform: scale(1.08); box-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
+            background: #fff;
+        }
+
+        @media (max-width: 480px) {
+            #chat-widget { right: 14px; bottom: 14px; }
+            #chat-window {
+                width: calc(100vw - 28px);
+                height: min(520px, calc(100dvh - 85px));
+                max-height: calc(100dvh - 85px);
+                margin-bottom: 8px;
+                border-radius: 18px;
+            }
+        }
+        @media (max-height: 680px) {
+            #chat-window {
+                height: calc(100dvh - 85px);
+                max-height: calc(100dvh - 85px);
+            }
+            #chat-header { height: 52px; min-height: 52px; padding: 8px 14px; }
+            #chat-messages { padding: 12px; gap: 8px; }
+            #chat-input-area { padding: 8px 12px; }
+        }
+
+        /* Accessibility: Prefers Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .message, .chat-followup-chips .chat-action-btn, #chat-window, .typing-dot, .chat-online-dot, #chat-bubble {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* --- CONTACT CARDS & HOVER STATES --- */
+        .contact-grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 40px; text-align: left; max-width: 1000px; margin: 0 auto;
+        }
+        
+        .contact-grid-container:hover .contact-card { opacity: 0.4; filter: blur(2px); }
+        .contact-grid-container .contact-card:hover { 
+            opacity: 1; filter: blur(0px); transform: translateY(-5px); 
+            background: var(--card-bg-hover);
+        }
+        
+        .status-dot {
+            display: inline-block; width: 8px; height: 8px; background: #00ff00;
+            border-radius: 50%; margin-left: 10px; position: relative;
+            box-shadow: 0 0 5px #00ff00;
+        }
+        .status-dot::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100%; height: 100%; border-radius: 50%; border: 1px solid #00ff00;
+            animation: pulseRing 2s infinite;
+        }
+        @keyframes pulseRing { 0% { width: 100%; height: 100%; opacity: 1; } 100% { width: 300%; height: 300%; opacity: 0; } }
+
+        .copy-trigger { cursor: pointer; position: relative; }
+        .copy-trigger:active { transform: scale(0.95); }
+        .copy-tooltip {
+            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #000; padding: 4px 10px; border-radius: 4px;
+            font-size: 0.7rem; font-weight: 600; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .copy-trigger.copied .copy-tooltip { opacity: 1; animation: floatUp 1s ease forwards; }
+        @keyframes floatUp { 0% { transform: translate(-50%, 0); opacity: 1; } 100% { transform: translate(-50%, -20px); opacity: 0; } }
+
+        /* --- HIRE SECTION TAGS --- */
+        .project-selector {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; 
+            margin: 40px auto; max-width: 800px;
+        }
+        .project-tag {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            color: var(--text-muted); padding: 12px 25px; border-radius: 50px;
+            cursor: pointer; transition: all 0.3s var(--ease-luxury);
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; 
+            font-size: 0.75rem; letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+        }
+        .project-tag:hover {
+            border-color: var(--gold); color: #fff; transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+        }
+        .project-tag.active {
+            background: var(--gold); color: #000; border-color: var(--gold); font-weight: 600;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- WEBSITES SECTION MEDIA HOVER --- */
+        .service-card:hover .video-overlay {
+            opacity: 0 !important;
+        }
+        .service-card:hover video,
+        .service-card:hover img {
+            filter: grayscale(0%) brightness(1.1) !important;
+        }
+        .service-card:hover {
+            border-color: var(--glass-border-hover) !important;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.25) !important;
+        }
+
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+
+        /* ==========================================
+           COMPREHENSIVE LUXURY RESPONSIVE DESIGN SYSTEM
+           ========================================== */
+        
+        .header-actions-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            padding: 0;
+            z-index: 10002;
+            transition: all 0.35s var(--ease-luxury);
+            touch-action: manipulation;
+        }
+        .mobile-menu-toggle:hover, .mobile-menu-toggle.active {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.12);
+            box-shadow: 0 0 16px var(--gold-glow);
+        }
+        .mobile-menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 2px;
+            transition: all 0.35s var(--ease-luxury);
+            transform-origin: center;
+        }
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: translateY(3.5px) rotate(45deg);
+        }
+        .mobile-menu-toggle.active span:nth-child(2) {
+            transform: translateY(-3.5px) rotate(-45deg);
+        }
+
+        /* Large Tablet / Laptop (max-width: 1100px) */
+        @media (max-width: 1100px) {
+            header { padding: 18px 4%; }
+            nav ul { gap: 20px; }
+            nav a { font-size: 0.75rem; letter-spacing: 1.5px; }
+            section { padding: 90px 7%; }
+        }
+
+        /* Tablet & Mobile Nav Drawer (max-width: 992px) */
+        @media (max-width: 992px) {
+            .mobile-menu-toggle { display: flex; }
+            header { padding: 14px 4%; }
+            
+            nav {
+                position: fixed;
+                inset: 0;
+                width: 100vw;
+                height: 100dvh;
+                background: rgba(6, 6, 8, 0.98);
+                backdrop-filter: blur(28px);
+                -webkit-backdrop-filter: blur(28px);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transform: translateY(-15px);
+                transition: opacity 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury), visibility 0.4s;
+                z-index: 9999;
+            }
+            nav.mobile-active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transform: translateY(0);
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+                text-align: center;
+                padding: 0;
+                width: 100%;
+                max-width: 300px;
+            }
+            nav a {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.3rem;
+                letter-spacing: 3px;
+                color: var(--text-muted);
+                padding: 10px 20px;
+                display: block;
+                width: 100%;
+                border-radius: 12px;
+                transition: all 0.3s ease;
+            }
+            nav a:hover, nav a.active {
+                color: var(--gold);
+                background: rgba(212, 175, 55, 0.08);
+                transform: scale(1.03);
+            }
+            .nav-indicator { display: none !important; }
+
+            .services-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+            .portfolio-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        }
+
+        /* Mobile Landscape & Tablet Portrait (max-width: 768px) */
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden !important;
+            }
+            
+            section { 
+                padding: 85px 5% 55px; 
+                min-height: calc(100dvh - 60px); 
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+            #home { 
+                padding-top: 110px; 
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .slide-from-right {
+                transform: translateX(20px);
+            }
+            .slide-from-right.visible {
+                transform: translateX(0);
+            }
+            
+            .section-title { font-size: clamp(2rem, 5.5vw, 2.8rem); margin-bottom: 1.4rem; }
+            .section-subtitle, .hero-subtitle { font-size: 0.78rem; letter-spacing: 5px; }
+            .shimmer-text, .shimmer-title { 
+                font-size: clamp(2.3rem, 6.8vw, 3.8rem); 
+                line-height: 1.15; 
+                margin-bottom: 20px; 
+                word-break: break-word;
+                overflow-wrap: break-word;
+                max-width: 100%;
+            }
+            #contact .shimmer-title { font-size: clamp(2.2rem, 6vw, 3rem); }
+            #hire .shimmer-title { font-size: clamp(2rem, 5.5vw, 2.6rem); }
+            .designer-name { font-size: clamp(2rem, 5.5vw, 2.8rem); }
+            .draw-line-vertical { margin: 25px auto; }
+            
+            #about {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            #about > div:nth-of-type(2) { 
+                grid-template-columns: 1fr !important; 
+                gap: 36px; 
+                text-align: center;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .hero-img-container { 
+                max-width: min(320px, 86vw); 
+                margin: 0 auto; 
+                padding: 12px;
+                border-radius: 20px;
+                box-sizing: border-box;
+            }
+            .about-quote-col {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .services-grid { grid-template-columns: 1fr; gap: 20px; margin-top: 30px; width: 100%; }
+            .service-card, .contact-card { padding: 32px 24px; border-radius: 20px; width: 100%; box-sizing: border-box; }
+            
+            .portfolio-grid { grid-template-columns: 1fr; gap: 16px; width: 100%; }
+            .portfolio-item { height: 260px; border-radius: 20px; width: 100%; }
+            
+            .contact-grid-container { grid-template-columns: 1fr; gap: 20px; width: 100%; }
+            
+            .custom-cursor-dot, .custom-cursor-ring { display: none !important; }
+            .animate-words span { transition-duration: 0.4s; }
+        }
+
+        /* Mobile Standard & Small Screens (max-width: 480px, down to 320px) */
+        @media (max-width: 480px) {
+            section { padding: 75px 4% 45px; }
+            header { padding: 12px 4%; }
+            .logo { font-size: clamp(1.05rem, 3.8vw, 1.25rem); letter-spacing: 0.5px; }
+            
+            .about-fz-link {
+                padding: 7px 12px !important;
+                font-size: 0.65rem !important;
+                letter-spacing: 1px !important;
+            }
+            
+            .intro-fz-wrap {
+                width: 120px;
+                height: 68px;
+                margin-bottom: 20px;
+            }
+            .intro-title {
+                font-size: clamp(0.92rem, 4vw, 1.15rem);
+                letter-spacing: clamp(3px, 1.6vw, 5px);
+            }
+
+            .shimmer-text, .shimmer-title { 
+                font-size: clamp(1.85rem, 8vw, 2.5rem); 
+                letter-spacing: -0.5px; 
+            }
+            .designer-name { font-size: clamp(1.75rem, 7.5vw, 2.3rem); }
+
+            .hero-img-container {
+                max-width: min(280px, 84vw);
+            }
+
+            .filter-nav { gap: 8px; margin-bottom: 24px; }
+            .filter-btn { 
+                padding: 8px 14px; 
+                font-size: 0.68rem; 
+                letter-spacing: 0.8px;
+            }
+            .portfolio-item { height: clamp(210px, 58vw, 250px); border-radius: 16px; }
+            .portfolio-overlay h3 { font-size: 1.2rem; }
+            .portfolio-overlay p { font-size: 0.82rem; }
+
+            .project-selector { gap: 8px; margin: 20px auto; }
+            .project-tag { padding: 9px 14px; font-size: 0.68rem; letter-spacing: 0.5px; }
+            #hire-cta-btn { 
+                padding: 14px 28px; 
+                font-size: 0.75rem; 
+                width: 100%; 
+                max-width: 280px; 
+                letter-spacing: 1.5px;
+            }
+
+            #contact-overlay-content { padding: 24px 16px; border-radius: 16px; }
+            #quote-display { font-size: 1.35rem; min-height: auto; margin: 20px 0; }
+            #contact-overlay-content .btn { width: 100%; max-width: 280px; }
+
+            #chat-window {
+                width: calc(100vw - 16px);
+                right: 8px;
+                left: 8px;
+                bottom: 72px;
+                height: calc(100dvh - 82px);
+                max-height: calc(100dvh - 82px);
+                margin: 0;
+                border-radius: 16px;
+            }
+            #chat-bubble { right: 12px; bottom: 12px; width: 50px; height: 50px; }
+            .chat-tooltip { display: none !important; }
+        }
+
+        /* Tiny Mobile (max-width: 360px) */
+        @media (max-width: 360px) {
+            .logo { font-size: 1.0rem; }
+            .about-fz-link { padding: 6px 10px !important; font-size: 0.62rem !important; }
+            .mobile-menu-toggle { width: 38px; height: 38px; }
+            .service-card, .contact-card { padding: 24px 16px; }
+            .project-tag { padding: 8px 12px; font-size: 0.64rem; }
+            .hero-img-container { max-width: min(240px, 82vw); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM LUXURY CURSOR -->
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+    <div class="custom-cursor-ring" id="cursor-ring"></div>
+
+    <div id="intro-overlay">
+        <div class="intro-dust">
+            <div class="dust-dot" style="left: 20%; top: 80%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+            <div class="dust-dot" style="left: 80%; top: 70%; width: 3px; height: 3px; animation-delay: 1s;"></div>
+            <div class="dust-dot" style="left: 40%; top: 60%; width: 5px; height: 5px; animation-delay: 2s;"></div>
+            <div class="dust-dot" style="left: 60%; top: 90%; width: 2px; height: 2px; animation-delay: 1.5s;"></div>
+        </div>
+
+        <div class="intro-content">
+            <div class="intro-fz-wrap">
+                <svg class="intro-fz-svg" viewBox="0 0 370 210" width="148" height="84" aria-label="FZ Monogram">
+                    <defs>
+                        <mask id="fz-stroke-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="370" height="210">
+                            <rect width="370" height="210" fill="black" />
+                            <path class="draw-path path-1" d="M 125,58 C 90,30 25,65 24,108 C 23,150 75,152 112,122 C 145,95 190,32 252,24 C 290,20 320,38 325,48" fill="none" stroke="white" stroke-width="58" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="draw-path path-2" d="M 178,65 C 152,90 120,128 82,156 C 42,185 8,168 14,138 C 20,110 55,108 85,118" fill="none" stroke="white" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="draw-path path-3" d="M 155,82 L 305,82" fill="none" stroke="white" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="draw-path path-4" d="M 295,82 C 248,124 205,162 165,188" fill="none" stroke="white" stroke-width="58" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="draw-path path-5" d="M 165,188 C 138,205 125,182 138,158 C 155,128 225,125 268,155 C 298,176 308,162 296,144" fill="none" stroke="white" stroke-width="58" stroke-linecap="round" stroke-linejoin="round" />
+                            <rect width="370" height="210" fill="white" class="mask-full-reveal" />
+                        </mask>
+                    </defs>
+                    <image href="assets/fz_monogram.png" width="370" height="210" class="fz-ambient-ghost" />
+                    <image href="assets/fz_monogram.png" width="370" height="210" mask="url(#fz-stroke-mask)" class="fz-gold-image" />
+                </svg>
+                <div class="fz-shine-sweep"></div>
+                <div class="fz-sparkle sp-top-right">✦</div>
+                <div class="fz-sparkle sp-inner">✦</div>
+            </div>
+            <div class="intro-text-mask">
+                <h1 class="intro-title" id="intro-title-text">THE BRAND TOUCH</h1>
+            </div>
+            <div class="intro-line"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         UNIFIED DYNAMIC CINEMATIC BACKGROUND ENGINE
+         ========================================== -->
+    <div id="dynamic-background" aria-hidden="true">
+        <div id="video-bg-layer" class="active-video">
+            <video id="bg-brand-video" src="assets/bg_brand.mp4" autoplay loop muted playsinline preload="auto">
+                <source src="assets/bg_brand.mp4" type="video/mp4">
+                <source src="bg_brand.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay-gradient"></div>
+        </div>
+        <canvas id="bg-canvas"></canvas>
+        <div class="bg-glow-layer"></div>
+        <div class="bg-vignette-layer"></div>
+    </div>
+
+    <div id="chat-widget">
+        <div id="chat-window">
+            <!-- Header -->
+            <div id="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">FZ</div>
+                    <div>
+                        <h4 style="color: var(--gold); font-size: 0.92rem; margin: 0; font-family: 'Playfair Display', serif; letter-spacing: 0.5px;">FZ Assistant</h4>
+                        <span style="font-size: 0.62rem; color: #27c93f; letter-spacing: 0.8px; font-weight: 600;"><span class="chat-online-dot"></span>ONLINE &bull; FZ CREATIVE STUDIO</span>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <button class="chat-icon-btn" id="chat-reset-btn" title="Reset Conversation" aria-label="Reset Conversation">↺</button>
+                    <button class="chat-icon-btn" id="close-chat" title="Close" aria-label="Close">&times;</button>
+                </div>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chat-messages">
+                <div class="message bot-msg">Hello! I am <strong>FZ Assistant</strong>. Ask me about design pricing, services, or web experiences.</div>
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Tell me what you'd like to design..." autocomplete="off">
+                <button id="send-chat" aria-label="Send Message">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Chat Bubble -->
+        <div id="chat-bubble" title="Chat with FZ Assistant">
+            <span class="chat-unread-badge" id="chat-unread-badge">1</span>
+            <span class="chat-tooltip">✨ Explore Services &amp; Pricing with FZ Assistant</span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+    </div>
+
+    <div id="ad-modal">
+        <button type="button" class="close-modal" id="close-portfolio-btn" aria-label="Close Portfolio Modal" title="Close Preview">&times;</button>
+        <div class="ad-modal-content" id="ad-modal-content">
+            <div class="ad-img-wrapper">
+                <img id="ad-img" src="" alt="Full View">
+            </div>
+            <div class="ad-info-box">
+                <h3 id="ad-title"></h3>
+                <p id="ad-subtitle"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-overlay">
+        <span class="close-contact contact-overlay-close" id="contact-overlay-close">&times;</span>
+        <div class="contact-overlay-content" id="contact-overlay-content" style="text-align: center; width: 100%; max-width: 800px; padding: 40px;">
+            <span class="hero-subtitle" style="font-size: 0.7rem;">Inquiry</span>
+            <h2 id="quote-display" style="font-size: 2.2rem; margin: 30px 0; color: var(--gold); font-style: italic; min-height: 120px; line-height: 1.4; font-family: 'Playfair Display';">
+                "Every brand has a soul—I simply give it a face."
+            </h2>
+            <div style="height: 1px; width: 100px; background: var(--gold); margin: 0 auto 40px; opacity: 0.3;"></div>
+            <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+                <a href="https://www.instagram.com/thefz.brandtouch._" target="_blank" class="btn btn-fill magnetic" style="width: 300px;">Instagram Profile ↗</a>
+                <a href="mailto:brandtouchfz@gmail.com" class="btn magnetic" style="width: 300px;">Direct Email</a>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">The Brand Touch</div>
+        <nav id="main-nav">
+            <ul>
+                <li><a href="#home" class="magnetic active">Home</a></li>
+                <li><a href="#services" class="nav-reveal magnetic">Services</a></li>
+                <li><a href="#portfolio" class="nav-reveal magnetic">Portfolio</a></li>
+                <li><a href="#websites" class="magnetic hoverable nav-link">Websites</a></li>
+                <li><a href="#hire" class="nav-reveal magnetic">Hire Me</a></li>
+                <li><a href="#contact" class="nav-reveal magnetic">Contact</a></li>
+                <div class="nav-indicator"></div>
+            </ul>
+        </nav>
+        <div class="header-actions-wrap">
+            <a href="about-fz.html"
+               onclick="window.location.href='about-fz.html'; return true;"
+               class="btn btn-fill magnetic about-fz-link"
+               aria-label="About FZ"
+               style="padding: 10px 22px; font-size: 0.72rem; letter-spacing: 1.5px; font-weight: 600;">
+               ABOUT FZ <span class="cta-arrow">↗</span>
+            </a>
+            <button type="button" id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section id="home">
+        <span class="hero-subtitle expand-tracking">Graphic Designer & Web Developer</span>
+        <div class="mask-container"><span class="shimmer-text reveal-text delay-1">Designing Visual</span></div>
+        <div class="mask-container"><span class="shimmer-text reveal-text delay-2"><em>Identities That Speak</em></span></div>
+        <div class="draw-line-vertical"></div>
+        <div id="about">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <span class="hero-subtitle animate-words">The Designer & Developer</span>
+                <h2 class="designer-name animate-words stagger-title">Faseeha Zulaika N</h2>
+                <div style="width: 50px; height: 1px; background: var(--gold); margin: 20px auto;" class="slide-from-right"></div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px; align-items: center;">
+                <div class="fade-in-up" style="display: flex; justify-content: center;">
+                    <div class="hero-img-container">
+                        <img src="assets/Gemini_Generated_Image_ghws3tghws3tghws.png" alt="Faseeha Zulaika N" loading="lazy" decoding="async" style="max-width: 100%; height: auto; display: block; border-radius: 15px;">
+                        <div style="position: absolute; top: -10px; right: -10px; width: 40px; height: 40px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);"></div>
+                    </div>
+                </div>
+                <div class="about-quote-col">
+                    <h3 class="animate-words" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; color: var(--gold); margin-bottom: 20px; line-height: 1.3;">
+                        "Every brand has a soul—I simply give it a face."
+                    </h3>
+                    <p class="slide-from-right" style="color: var(--text-main); font-size: 1.05rem; margin-bottom: 20px; transition-delay: 0.3s; letter-spacing: 0.5px;">Through <strong>The Brand Touch</strong>, I bridge the gap between visual identity, interactive web experiences, and digital engineering.</p>
+                    <p class="slide-from-right" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 35px; transition-delay: 0.5s; line-height: 1.8;">By blending minimalist precision with luxury aesthetics and modern frontend engineering, I ensure that your first impression isn't just seen, but deeply felt, interactively engaged, and long remembered.</p>
+                    <div class="slide-from-right" style="transition-delay: 0.7s;"><a href="#services" class="btn btn-outline nav-reveal magnetic">Elevate Your Brand</a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <span class="section-subtitle fade-in-up">Excellence in Design</span>
+        <h2 class="section-title animate-words stagger-title">My Services</h2>
+        <div class="services-grid">
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Menu Card Design</h3>
+                <p>Elegant menu layouts that enhance the dining experience.</p>
+                <ul>
+                    <li>Custom Layouts</li>
+                    <li>Brand Typography</li>
+                    <li>Print-Ready Files</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Business Card Design</h3>
+                <p>Sophisticated designs that create a strong first impression.</p>
+                <ul>
+                    <li>Double-Sided Design</li>
+                    <li>Premium Finish Mockups</li>
+                    <li>Modern Minimalism</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Poster Design</h3>
+                <p>High-impact visual communication for products, services, or events.</p>
+                <ul>
+                    <li>Product Showcasing</li>
+                    <li>Event Promotion</li>
+                    <li>Visual Hierarchy</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Brochure Design</h3>
+                <p>Thoughtful layouts that communicate your business clearly.</p>
+                <ul>
+                    <li>Corporate Profiles</li>
+                    <li>Product Catalogs</li>
+                    <li>Marketing Collateral</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Web Design</h3>
+                <p>Modern, responsive website designs crafted for engaging digital experiences.</p>
+                <ul>
+                    <li>Responsive Layouts</li>
+                    <li>Frontend Development</li>
+                    <li>3D &amp; Scroll Effects</li>
+                    <li>AI Integrations</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in-up tilt-card">
+                <h3>Logo Design</h3>
+                <p>Distinctive visual identities and marks tailored to your brand.</p>
+                <ul>
+                    <li>Custom Vector Marks</li>
+                    <li>Brand Typography</li>
+                    <li>Scalable Assets</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="websites">
+        <span class="section-subtitle fade-in-up">Web Engineering</span>
+        <h2 class="section-title animate-words stagger-title">Live Platforms</h2>
+        <div class="services-grid">
+            <!-- Project 1: AuraFaz Fragrance Hub -->
+            <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="AuraFaz Fragrance Hub" data-demo-url="https://fasee9831.github.io/Perfume-ecommerce-website/" data-demo-desc="Responsive luxury e-commerce web application featuring dynamic layout structures, fragrance catalog, and booking form validation." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
+                <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
+                    <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
+                    <img src="aurafaz_cover.png" alt="AuraFaz Fragrance Hub" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                </div>
+                <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">AuraFaz Fragrance Hub</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Responsive e-commerce web application featuring dynamic layout structures and booking form validation.</p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> HTML/CSS</li>
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> JavaScript</li>
+                </ul>
+            </div>
+
+            <!-- Project 2: ÉLVARA — Haute Horlogerie -->
+            <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="ÉLVARA — Haute Horlogerie" data-demo-url="https://elvara-watch-website.faseehazulaika.workers.dev" data-demo-desc="Ultra-luxury digital atelier and interactive storytelling experience for handcrafted Haute Horlogerie timepieces featuring 3D customization and scroll-driven calibre scrubbing." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
+                <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
+                    <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
+                    <img src="elvara_cover.png" alt="ÉLVARA — Manufacture de Haute Horlogerie" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(15%) brightness(0.95); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                </div>
+                <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">ÉLVARA Timepieces</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Ultra-luxury digital atelier and interactive storytelling experience for handcrafted Haute Horlogerie timepieces.</p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> React 19 / TypeScript</li>
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> GSAP & Canvas</li>
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> 3D Watch Customizer</li>
+                </ul>
+            </div>
+
+            <!-- Project 3: Porsche 911 GT3 Viewport -->
+            <div class="web-card service-card fade-in-up tilt-card hoverable" data-demo-title="Porsche 911 GT3 Viewport" data-demo-url="https://porsche-gt3.onrender.com/" data-demo-desc="Immersive 3D vehicle configuration platform featuring telemetry graphics, GSAP scroll dynamics, and HTML Canvas rendering." style="display: flex; flex-direction: column; background: rgba(18, 18, 18, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;">
+                <div class="video-wrapper" style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; border: 1px solid rgba(212, 175, 55, 0.15);">
+                    <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.85)); z-index: 2; transition: opacity 0.4s;"></div>
+                    <img src="porche_cover.png" alt="Porsche 911 GT3 Viewport" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(20%) brightness(0.9); transition: filter 0.5s ease; position: relative; z-index: 1;">
+                </div>
+                <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-family: 'Playfair Display', serif;">Porsche 911 GT3 Viewport</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Immersive 3D vehicle configuration platform featuring telemetry and scroll-driven video backgrounds.</p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> WebGL</li>
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> GSAP</li>
+                    <li style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--gold);">✦</span> HTML Canvas</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Modal Viewer -->
+    <div id="demo-modal" style="display: none; position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(3,3,5,0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); z-index: 200000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.35s ease; padding: clamp(12px, 3vh, 28px) clamp(12px, 2.5vw, 24px); box-sizing: border-box; overflow-y: auto;">
+        <button
+            type="button"
+            id="demo-close-btn"
+            class="close-demo"
+            aria-label="Close live preview"
+            title="Close"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div id="demo-modal-content" style="width: 100%; max-width: 1020px; max-height: calc(100dvh - 36px); background: rgba(14, 14, 18, 0.98); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px rgba(0,0,0,0.95), 0 0 50px rgba(212,175,55,0.2); display: flex; flex-direction: column; position: relative; z-index: 2; margin: auto;">
+            <!-- Browser Header -->
+            <div style="background: rgba(22, 22, 28, 0.98); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 12px;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f56; display: inline-block;"></span>
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; display: inline-block;"></span>
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #27c93f; display: inline-block;"></span>
+                </div>
+                <div id="demo-url-bar" style="background: rgba(0,0,0,0.65); border: 1px solid rgba(212,175,55,0.25); color: var(--gold); padding: 5px 18px; border-radius: 20px; font-size: 0.78rem; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 480px; text-align: center; flex-grow: 1;">
+                    https://porsche-gt3.onrender.com/
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+                    <div style="color: #00ff00; font-size: 0.72rem; letter-spacing: 1px; display: flex; align-items: center; gap: 5px; white-space: nowrap;">
+                        <span class="status-dot"></span> DEMO ACTIVE
+                    </div>
+                    <button type="button" class="close-demo-inline" aria-label="Close modal" title="Close modal">&times;</button>
+                </div>
+            </div>
+            <!-- Body Content -->
+            <div style="padding: clamp(16px, 2.5vh, 24px) clamp(16px, 3vw, 32px); overflow-y: auto; flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="text-align: left; flex: 1; min-width: 260px;">
+                        <h3 id="demo-title" style="color: var(--gold); font-size: clamp(1.3rem, 2.4vw, 1.75rem); font-family: 'Playfair Display', serif; line-height: 1.25; margin-bottom: 4px;">Porsche 911 GT3 Viewport</h3>
+                        <p id="demo-desc" style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.5; max-width: 650px; margin: 0;"></p>
+                    </div>
+                    <a href="#" id="demo-live-btn" target="_blank" class="btn btn-fill magnetic" style="padding: 10px 24px; font-size: 0.8rem; background: var(--gold); color: #000; font-weight: 600; box-shadow: 0 0 20px rgba(212,175,55,0.4); white-space: nowrap;">Launch Live Application ↗</a>
+                </div>
+                <!-- Embedded Frame & Luxury Loader -->
+                <div style="width: 100%; height: clamp(240px, 44vh, 440px); min-height: 240px; background: #08080a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-top: 4px; position: relative;">
+                    <!-- Sleek Luxury Loading Overlay -->
+                    <div id="demo-loader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.96); backdrop-filter: blur(10px); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; transition: opacity 0.5s ease;">
+                        <div class="loader-spinner" style="width: 44px; height: 44px; border: 3px solid rgba(212, 175, 55, 0.15); border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <div style="color: var(--gold); font-family: 'Playfair Display', serif; font-size: 1.05rem; letter-spacing: 1px;">Connecting to Live Web Application...</div>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; max-width: 440px; line-height: 1.5; margin: 0;">Initializing live environment telemetry. Please wait a moment while the platform loads.</p>
+                        <a href="#" id="demo-loader-btn" target="_blank" class="btn btn-fill magnetic" style="margin-top: 6px; padding: 8px 20px; font-size: 0.75rem; background: rgba(212, 175, 55, 0.15); color: var(--gold); border: 1px solid var(--gold);">Open Direct Fullscreen Site ↗</a>
+                    </div>
+                    <iframe id="demo-iframe" src="" style="width: 100%; height: 100%; border: none; display: block; position: relative; z-index: 2;" title="Live Preview"></iframe>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.78rem; opacity: 0.85; margin: 2px 0 0;">
+                    💡 <em>Note: If the live 3D web application does not render inside the frame due to host security policies, click <strong>Launch Live Application ↗</strong> above to view it in full screen.</em>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <section id="portfolio">
+        <span class="section-subtitle fade-in-up">Selected Works</span>
+        <h2 class="section-title animate-words stagger-title">Portfolio</h2>
+        <div class="filter-nav fade-in-up">
+            <button class="filter-btn active magnetic" data-filter="all">All</button>
+            <button class="filter-btn magnetic" data-filter="menu">Menu Cards</button>
+            <button class="filter-btn magnetic" data-filter="poster">Posters</button>
+            <button class="filter-btn magnetic" data-filter="brochure">Brochures</button>
+            <button class="filter-btn magnetic" data-filter="business">Business Cards</button>
+        </div>
+        <div class="portfolio-grid fade-in-up">
+            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/menu.png');"><div class="portfolio-overlay"><h3>Bakers Point</h3><p>Bakery Menu Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/poster.png');"><div class="portfolio-overlay"><h3>Blue Lady</h3><p>Poster Ad</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/chanel perfume.png');"><div class="portfolio-overlay"><h3>Chanel N°5</h3><p>Luxury Perfume Poster</p></div></div>
+            <div class="portfolio-item" data-category="menu" style="background-image: url('assets/shawwwwwwwwweeeeeeeeeee.png');"><div class="portfolio-overlay"><h3>Shawarma Menu Card</h3><p>Restaurant Menu Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/mouse.png');"><div class="portfolio-overlay"><h3>AirPods Pro</h3><p>Product Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/orange.png');"><div class="portfolio-overlay"><h3>Luminous Recovery</h3><p>Luxury Skincare Ad</p></div></div>
+            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/brochure.png');"><div class="portfolio-overlay"><h3>Bakery Brand Brochure</h3><p>Brand Presentation Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/ELVIS GLOAMING.png');"><div class="portfolio-overlay"><h3>Elvis Gloaming</h3><p>Premium Skin Care Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/cosmo.png');"><div class="portfolio-overlay"><h3>COSMO Glow Natural</h3><p>Pure Aloe Care — Skincare Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/burger.png');"><div class="portfolio-overlay"><h3>Burger Promo Poster</h3><p>Food Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/NIKE.png');"><div class="portfolio-overlay"><h3>Nike Air Force 1</h3><p>Footwear Poster Design</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/obsidian watch.png');"><div class="portfolio-overlay"><h3>Obsidian Elite Watch</h3><p>Premium Watch Ad</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/best spprite.png');"><div class="portfolio-overlay"><h3>Feel the Fizz</h3><p>High-Impact Product Advertisement</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/coffeeposter.png');"><div class="portfolio-overlay"><h3>Sleepy Owl Coffee</h3><p>Wake Your Inner Owl — Beverage Poster</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/GUERLAIN.png');"><div class="portfolio-overlay"><h3>Rouge G by Guerlain</h3><p>Iconic Rouge G Lipstick</p></div></div>
+            <div class="portfolio-item" data-category="business" style="background-image: url('assets/busnesscard.png');"><div class="portfolio-overlay"><h3>Luxury Cards</h3><p>Business Cards</p></div></div>
+            <div class="portfolio-item" data-category="poster" style="background-image: url('assets/PISTACHIO.png');"><div class="portfolio-overlay"><h3>Pistachio Scoop</h3><p>Crafted for True Ice Cream Lovers</p></div></div>
+            <div class="portfolio-item" data-category="business" style="background-image: url('assets/bc.png');"><div class="portfolio-overlay"><h3>Premium Business Cards</h3><p>Clean Premium Design</p></div></div>
+            <div class="portfolio-item" data-category="brochure" style="background-image: url('assets/simple brochure.png');"><div class="portfolio-overlay"><h3>Bakery Brochure</h3><p>Clean & Professional Layout</p></div></div>
+        </div>
+    </section>
+
+    <section id="hire">
+        <div style="text-align: center; overflow: hidden;">
+            <span class="section-subtitle fade-in-up">Start Your Project</span>
+            <h2 class="shimmer-title slide-from-right">What are you <em>Looking For?</em></h2>
+            
+            <div class="project-selector fade-in-up" style="transition-delay: 0.2s;">
+                <button class="project-tag" onclick="selectProject(this, 'Menu Design')">Menu Design</button>
+                <button class="project-tag" onclick="selectProject(this, 'Business Card')">Business Card</button>
+                <button class="project-tag" onclick="selectProject(this, 'Poster/Ad')">Poster/Ad</button>
+                <button class="project-tag" onclick="selectProject(this, 'Brochure')">Brochure</button>
+                <button class="project-tag" onclick="selectProject(this, 'Brand Identity')">Brand Identity</button>
+                <button class="project-tag hoverable" onclick="selectProject(this, 'Web Development')">Web Development</button>
+            </div>
+
+            <p class="slide-from-right" style="color: var(--text-muted); margin-bottom: 40px; margin-top: 20px; transition-delay: 0.2s;">
+                Premium Quality • Fast Delivery • Unique Concepts
+            </p>
+            
+            <div class="fade-in-up" style="transition-delay: 0.4s;">
+                <a href="#" id="hire-cta-btn" class="btn btn-fill open-social-trigger magnetic">Get Started Today</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <span class="section-subtitle fade-in-up">Get In Touch</span>
+        <h2 class="shimmer-title fade-in-up" style="text-align: center;">Let's Work Together</h2>
+        <p class="fade-in-up" style="text-align: center; color: var(--text-muted); max-width: 600px; margin: 0 auto 60px; font-size: 0.9rem;">
+            I am currently available for freelance projects.
+        </p>
+
+        <div class="contact-grid-container">
+            <div class="contact-card fade-in-up tilt-card">
+                <h4 style="color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 20px;">Email</h4>
+                <div class="copy-trigger" onclick="copyEmail(this)">
+                    <span class="copy-tooltip">Copied!</span>
+                    <span style="font-size: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; display: inline-block; margin-bottom: 10px;">brandtouchfz@gmail.com</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Click to copy address.</p>
+            </div>
+
+            <div class="contact-card fade-in-up tilt-card" style="transition-delay: 0.1s;">
+                <h4 style="color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 20px;">Portfolio / Social</h4>
+                <a href="https://www.instagram.com/thefz.brandtouch._" target="_blank" style="font-size: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; display: inline-block; margin-bottom: 10px;">@thefz.brandtouch._</a>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Check my latest concepts.</p>
+            </div>
+
+            <div class="contact-card fade-in-up tilt-card" style="transition-delay: 0.2s;">
+                <h4 style="color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 20px;">Status</h4>
+                <p style="font-size: 1.2rem; margin-bottom: 10px; display: flex; align-items: center;">
+                    Available <span class="status-dot"></span>
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Ready to start immediately.</p>
+            </div>
+        </div>
+
+        <div class="fade-in-up" style="text-align: center; margin-top: 80px;">
+            <a href="#" class="btn btn-fill open-social-trigger magnetic" style="padding: 20px 60px;">Contact Me</a>
+        </div>
+    </section>
+
+    <footer style="padding: 40px; text-align: center; border-top: 1px solid var(--glass-border); font-size: 0.8rem; color: var(--text-muted);">
+        <p class="magnetic">&copy; 2026 The Brand Touch by FZ. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- 0. CUSTOM LUXURY CURSOR LOGIC ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let ringX = mouseX, ringY = mouseY;
+        let cursorVisible = false;
+        let cursorRaf = null;
+
+        function animateCursor() {
+            if (!cursorVisible) return;
+            ringX += (mouseX - ringX) * 0.18;
+            ringY += (mouseY - ringY) * 0.18;
+            if (cursorDot) {
+                cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+            }
+            if (cursorRing) {
+                cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+            }
+            cursorRaf = requestAnimationFrame(animateCursor);
+        }
+
+        if (isFinePointer) {
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!cursorVisible) {
+                    cursorVisible = true;
+                    ringX = mouseX;
+                    ringY = mouseY;
+                    if (!cursorRaf) animateCursor();
+                }
+            }, { passive: true });
+
+            document.addEventListener('mouseover', (e) => {
+                if (e.target && e.target.closest && e.target.closest('a, button, .service-card, .portfolio-item, .contact-card, .copy-trigger, #chat-bubble, .project-tag, .filter-btn, .suggestion-chip, .close-modal, .close-demo, .close-contact, .chat-action-btn, .chat-icon-btn, input, textarea, .hoverable')) {
+                    document.body.classList.add('cursor-hover');
+                } else {
+                    document.body.classList.remove('cursor-hover');
+                }
+            }, { passive: true });
+        }
+
+        // --- 1. INTRO TEXT SPLIT LOGIC (Zero layout thrash via textContent & DocumentFragment) ---
+        function setupIntroAnimation() {
+            const introTitle = document.getElementById('intro-title-text');
+            if (!introTitle) return;
+            const text = introTitle.textContent;
+            introTitle.textContent = '';
+            const frag = document.createDocumentFragment();
+            text.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                if (char === ' ') span.style.width = '15px';
+                span.style.animationDelay = `${1.8 + (index * 0.1)}s, ${3 + (index * 0.1)}s`; 
+                frag.appendChild(span);
+            });
+            introTitle.appendChild(frag);
+        }
+        setupIntroAnimation();
+
+        // --- 2. WORD & LETTER REVEALS LOGIC ---
+        function setupWordAnimations() {
+            const elements = document.querySelectorAll('.animate-words:not(.stagger-title)');
+            elements.forEach(el => {
+                const text = el.textContent.trim();
+                const words = text.split(/\s+/);
+                el.textContent = '';
+                const frag = document.createDocumentFragment();
+                words.forEach((word, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = word + ' ';
+                    span.style.transitionDelay = `${index * 70}ms`; 
+                    frag.appendChild(span);
+                });
+                el.appendChild(frag);
+            });
+        }
+        setupWordAnimations();
+
+        function setupStaggeredTitles() {
+            const titles = document.querySelectorAll('.stagger-title');
+            titles.forEach(title => {
+                const text = title.textContent.trim();
+                title.textContent = '';
+                const frag = document.createDocumentFragment();
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    if (char === ' ') span.style.width = '0.3em';
+                    span.style.transitionDelay = `${index * 35}ms`;
+                    frag.appendChild(span);
+                });
+                title.appendChild(frag);
+            });
+        }
+        setupStaggeredTitles();
+
+        // --- 3. START ANIMATION TIMING ---
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                setTimeout(() => {
+                    const heroElements = document.querySelectorAll('#home .fade-in-up, #home .shimmer-title');
+                    heroElements.forEach(el => el.classList.add('visible'));
+                }, 500);
+            }, 3500); 
+        });
+
+        // --- 4. SCROLL ANIMATIONS (REPEATING ON EVERY SECTION VISIT) ---
+        const observerOptions = { threshold: 0.08, rootMargin: "0px 0px -25px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in-up, .slide-from-right, .animate-words, .shimmer-title, .stagger-title, .tilt-card, .service-card, .web-card, .gallery-item').forEach(el => observer.observe(el));
+
+        // --- 5. HEAVIER PHYSICAL TILT EFFECT & 6. PHYSICAL MAGNETIC BUTTONS (Desktop fine-pointer only) ---
+        if (isFinePointer) {
+            const tiltCards = document.querySelectorAll('.tilt-card, .contact-card');
+            tiltCards.forEach(card => {
+                let rect = null;
+                let rafId = null;
+
+                card.addEventListener('mouseenter', () => {
+                    rect = card.getBoundingClientRect();
+                }, { passive: true });
+
+                card.addEventListener('mousemove', (e) => {
+                    if (!rect) rect = card.getBoundingClientRect();
+                    if (rafId) return;
+                    rafId = requestAnimationFrame(() => {
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const rotateX = ((y - centerY) / centerY) * -8;
+                        const rotateY = ((x - centerX) / centerX) * 8;
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                        rafId = null;
+                    });
+                }, { passive: true });
+
+                card.addEventListener('mouseleave', () => {
+                    rect = null;
+                    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                    card.style.transform = '';
+                }, { passive: true });
+            });
+
+            const magnets = document.querySelectorAll('.magnetic');
+            magnets.forEach((magnet) => {
+                let position = null;
+                let rafId = null;
+
+                magnet.addEventListener('mouseenter', () => {
+                    position = magnet.getBoundingClientRect();
+                }, { passive: true });
+
+                magnet.addEventListener('mousemove', (e) => {
+                    if (!position) position = magnet.getBoundingClientRect();
+                    if (rafId) return;
+                    rafId = requestAnimationFrame(() => {
+                        const x = e.clientX - position.left - position.width / 2;
+                        const y = e.clientY - position.top - position.height / 2;
+                        magnet.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+                        rafId = null;
+                    });
+                }, { passive: true });
+
+                magnet.addEventListener('mouseleave', () => {
+                    position = null;
+                    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                    magnet.style.transform = '';
+                }, { passive: true });
+            });
+        }
+
+        // --- 7. UNIFIED DYNAMIC CINEMATIC BACKGROUND ENGINE ---
+        const bgCanvas = document.getElementById('bg-canvas');
+        let bgCtx = null;
+        let bgWidth = 0, bgHeight = 0, bgDpr = 1;
+        let bgIsMobile = false;
+        let bgEngineTime = 0;
+        let bgLastTime = performance.now();
+        let bgMouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 };
+        let bgIsVisible = !document.hidden;
+        let bgReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Scene State Machine
+        let activeSceneKey = 'home';
+        let prevSceneKey = null;
+        let transitionStartTime = 0;
+        const SCENE_TRANSITION_DURATION = 1400; // 1.4s
+
+        // Ease function approximating cubic-bezier(0.16, 1, 0.3, 1)
+        function easeLuxury(t) {
+            return 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3.5);
+        }
+
+        const backgroundScenes = {
+            // SCENE 1 — HOME: "Cinematic Brand Video Background (Video Only)"
+            home: {
+                glow: { x: '50%', y: '42%', color: 'rgba(212, 175, 55, 0.04)' },
+                init() {},
+                render() {
+                    // Video only — exactly like before. Zero canvas floating elements.
+                }
+            },
+
+            // SCENE 2 — SERVICES: "Cinematic Brand Video Background (Video Only)"
+            services: {
+                glow: { x: '50%', y: '35%', color: 'rgba(212, 175, 55, 0.04)' },
+                init() {},
+                render() {
+                    // Video only — exactly like before. Zero canvas floating elements.
+                }
+            },
+
+            // SCENE 3 — PORTFOLIO: "Dual Orbital Vortex of Swirling Stardust"
+            portfolio: {
+                glow: { x: '50%', y: '50%', color: 'rgba(212, 175, 55, 0.08)' },
+                init(w, h, isMobile) {
+                    const count = isMobile ? 30 : 60;
+                    this.particles = Array.from({ length: count }, (v, i) => {
+                        const hub = i % 2 === 0 ? 0 : 1;
+                        return {
+                            hub: hub,
+                            dist: Math.random() * Math.min(w, h) * 0.38 + 25,
+                            angle: Math.random() * Math.PI * 2,
+                            speed: (Math.random() * 0.006 + 0.003) * (hub === 0 ? 1 : -1),
+                            radius: Math.random() * 2.0 + 0.7,
+                            baseAlpha: Math.random() * 0.32 + 0.12,
+                            pulseSpeed: Math.random() * 0.03 + 0.01,
+                            phase: Math.random() * Math.PI * 2
+                        };
+                    });
+
+                    const haloCount = isMobile ? 4 : 8;
+                    this.halos = Array.from({ length: haloCount }, (v, i) => ({
+                        xRel: 0.15 + (i % 4) * 0.24,
+                        yRel: 0.25 + Math.floor(i / 4) * 0.45,
+                        radius: Math.random() * 65 + 45,
+                        driftSpeed: Math.random() * 0.2 + 0.1,
+                        phase: Math.random() * Math.PI * 2,
+                        alpha: Math.random() * 0.035 + 0.015
+                    }));
+                },
+                render(ctx, w, h, t, alpha, mouse) {
+                    if (alpha <= 0.001) return;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    const mouseOffsetX = (mouse.x - w * 0.5) * 0.03;
+                    const mouseOffsetY = (mouse.y - h * 0.5) * 0.03;
+
+                    // 1. Soft Caustic Glow Halos
+                    this.halos.forEach(hOrb => {
+                        const cx = w * hOrb.xRel + Math.sin(t * hOrb.driftSpeed + hOrb.phase) * 25 + mouseOffsetX;
+                        const cy = h * hOrb.yRel + Math.cos(t * hOrb.driftSpeed * 0.8 + hOrb.phase) * 18 + mouseOffsetY;
+
+                        const radGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, hOrb.radius);
+                        radGrad.addColorStop(0, `rgba(255, 235, 170, ${hOrb.alpha * 1.5})`);
+                        radGrad.addColorStop(0.4, `rgba(212, 175, 55, ${hOrb.alpha})`);
+                        radGrad.addColorStop(1, 'rgba(5, 5, 5, 0)');
+
+                        ctx.fillStyle = radGrad;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, hOrb.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+
+                    // 2. Dual Vortex Stardust Particles
+                    const hub0 = { x: w * 0.28 + mouseOffsetX, y: h * 0.48 + mouseOffsetY };
+                    const hub1 = { x: w * 0.72 + mouseOffsetX, y: h * 0.52 + mouseOffsetY };
+
+                    this.particles.forEach(p => {
+                        p.angle += p.speed;
+                        const hubPos = p.hub === 0 ? hub0 : hub1;
+                        const r = p.dist + Math.sin(t * 0.8 + p.phase) * 15;
+                        let px = hubPos.x + Math.cos(p.angle) * r;
+                        let py = hubPos.y + Math.sin(p.angle) * (r * 0.7);
+
+                        const dx = mouse.x - px;
+                        const dy = mouse.y - py;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130 && dist > 0) {
+                            const force = (130 - dist) / 130 * 0.7;
+                            px -= (dx / dist) * force;
+                            py -= (dy / dist) * force;
+                        }
+
+                        const pAlpha = p.baseAlpha * (0.7 + Math.sin(t * p.pulseSpeed * 60 + p.phase) * 0.3);
+                        ctx.beginPath();
+                        ctx.arc(px, py, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 225, 130, ${pAlpha})`;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.45)';
+                        ctx.shadowBlur = p.radius * 3.5;
+                        ctx.fill();
+                    });
+
+                    ctx.restore();
+                }
+            },
+
+            // SCENE 4 — WEBSITES: "Harmonic Sinusoidal Wave Currents of Stardust"
+            websites: {
+                glow: { x: '50%', y: '30%', color: 'rgba(212, 175, 55, 0.08)' },
+                init(w, h, isMobile) {
+                    const count = isMobile ? 32 : 65;
+                    this.waveParticles = Array.from({ length: count }, () => ({
+                        x: Math.random() * w,
+                        stream: Math.floor(Math.random() * 4),
+                        vx: Math.random() * 0.6 + 0.35,
+                        radius: Math.random() * 1.9 + 0.7,
+                        baseAlpha: Math.random() * 0.32 + 0.12,
+                        phase: Math.random() * Math.PI * 2,
+                        pulseSpeed: Math.random() * 0.03 + 0.015
+                    }));
+                },
+                render(ctx, w, h, t, alpha, mouse) {
+                    if (alpha <= 0.001) return;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    // 1. Sleek Luminous Harmonic Waves
+                    const waves = 4;
+                    for (let i = 0; i < waves; i++) {
+                        const yBase = h * (0.24 + i * 0.18);
+                        ctx.beginPath();
+                        ctx.moveTo(0, yBase);
+                        for (let x = 0; x <= w; x += 25) {
+                            const y = yBase + Math.sin(x * 0.0028 + t * 0.4 + i * 1.4) * 35 + Math.cos(x * 0.0014 - t * 0.25) * 18;
+                            ctx.lineTo(x, y);
+                        }
+                        const waveGrad = ctx.createLinearGradient(0, 0, w, 0);
+                        waveGrad.addColorStop(0, 'rgba(212, 175, 55, 0)');
+                        waveGrad.addColorStop(0.3, 'rgba(180, 140, 50, 0.12)');
+                        waveGrad.addColorStop(0.5, 'rgba(255, 235, 170, 0.26)');
+                        waveGrad.addColorStop(0.7, 'rgba(212, 175, 55, 0.12)');
+                        waveGrad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                        ctx.strokeStyle = waveGrad;
+                        ctx.lineWidth = 1.3;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.35)';
+                        ctx.shadowBlur = 8;
+                        ctx.stroke();
+                    }
+
+                    // 2. Wave-Borne Stardust Particles
+                    this.waveParticles.forEach(p => {
+                        p.x += p.vx;
+                        if (p.x > w + 20) p.x = -20;
+
+                        const yBase = h * (0.24 + p.stream * 0.18);
+                        let py = yBase + Math.sin(p.x * 0.0028 + t * 0.4 + p.stream * 1.4) * 35 + Math.cos(p.x * 0.0014 - t * 0.25) * 18;
+                        let px = p.x;
+
+                        const dx = mouse.x - px;
+                        const dy = mouse.y - py;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130 && dist > 0) {
+                            const force = (130 - dist) / 130 * 0.7;
+                            px -= (dx / dist) * force;
+                            py -= (dy / dist) * force;
+                        }
+
+                        const pAlpha = p.baseAlpha * (0.7 + Math.sin(t * p.pulseSpeed * 60 + p.phase) * 0.3);
+                        ctx.beginPath();
+                        ctx.arc(px, py, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 235, 160, ${pAlpha})`;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.5)';
+                        ctx.shadowBlur = p.radius * 3.5;
+                        ctx.fill();
+                    });
+
+                    ctx.restore();
+                }
+            },
+
+            // SCENE 5 — HIRE: "Royal Champagne Corona & Floating Radiant Stardust"
+            hire: {
+                glow: { x: '50%', y: '50%', color: 'rgba(212, 175, 55, 0.09)' },
+                init(w, h, isMobile) {
+                    const count = isMobile ? 28 : 55;
+                    this.particles = Array.from({ length: count }, () => ({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        radius: Math.random() * 1.8 + 0.6,
+                        vx: (Math.random() - 0.5) * 0.2,
+                        vy: -Math.random() * 0.35 - 0.12,
+                        baseAlpha: Math.random() * 0.35 + 0.15,
+                        phase: Math.random() * Math.PI * 2,
+                        pulseSpeed: Math.random() * 0.025 + 0.012
+                    }));
+
+                    const orbCount = isMobile ? 4 : 7;
+                    this.bokehOrbs = Array.from({ length: orbCount }, () => ({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        radius: Math.random() * 65 + 40,
+                        vy: -Math.random() * 0.12 - 0.04,
+                        vx: (Math.random() - 0.5) * 0.08,
+                        alpha: Math.random() * 0.035 + 0.015
+                    }));
+                },
+                render(ctx, w, h, t, alpha, mouse) {
+                    if (alpha <= 0.001) return;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    // 1. Central Radiant Luxury Corona / Spotlight Aura
+                    const breath = Math.sin(t * 0.5) * 0.5 + 0.5;
+                    const corona = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * 0.72);
+                    corona.addColorStop(0, `rgba(212, 175, 55, ${0.045 + breath * 0.03})`);
+                    corona.addColorStop(0.45, `rgba(180, 140, 40, ${0.018 + breath * 0.012})`);
+                    corona.addColorStop(0.85, 'rgba(15, 12, 8, 0.005)');
+                    corona.addColorStop(1, 'rgba(5, 5, 5, 0)');
+                    ctx.fillStyle = corona;
+                    ctx.fillRect(0, 0, w, h);
+
+                    // 2. Soft Depth Bokeh Halos
+                    this.bokehOrbs.forEach(b => {
+                        b.y += b.vy;
+                        b.x += b.vx;
+                        if (b.y < -b.radius * 2) { b.y = h + b.radius; b.x = Math.random() * w; }
+                        if (b.x < -b.radius) b.x = w + b.radius;
+                        if (b.x > w + b.radius) b.x = -b.radius;
+
+                        const bGrad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.radius);
+                        bGrad.addColorStop(0, `rgba(255, 235, 170, ${b.alpha * 1.5})`);
+                        bGrad.addColorStop(0.5, `rgba(212, 175, 55, ${b.alpha})`);
+                        bGrad.addColorStop(1, 'rgba(5, 5, 5, 0)');
+                        ctx.fillStyle = bGrad;
+                        ctx.beginPath();
+                        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+
+                    // 3. Graceful Concentric Horizon Arcs
+                    const arcCount = 3;
+                    for (let i = 0; i < arcCount; i++) {
+                        ctx.beginPath();
+                        const rX = w * (0.42 + i * 0.16);
+                        const rY = h * (0.28 + i * 0.12);
+                        const rot = Math.sin(t * 0.15 + i * 1.2) * 0.08;
+                        ctx.save();
+                        ctx.translate(w * 0.5, h * 0.52);
+                        ctx.rotate(rot);
+                        ctx.ellipse(0, 0, rX, rY, 0, 0, Math.PI * 2);
+                        ctx.restore();
+
+                        const arcGrad = ctx.createLinearGradient(0, 0, w, h);
+                        arcGrad.addColorStop(0, 'rgba(212, 175, 55, 0)');
+                        arcGrad.addColorStop(0.3, 'rgba(212, 175, 55, 0.08)');
+                        arcGrad.addColorStop(0.5, 'rgba(255, 235, 170, 0.18)');
+                        arcGrad.addColorStop(0.7, 'rgba(212, 175, 55, 0.08)');
+                        arcGrad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+
+                        ctx.strokeStyle = arcGrad;
+                        ctx.lineWidth = 1.1;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.3)';
+                        ctx.shadowBlur = 8;
+                        ctx.stroke();
+                    }
+
+                    // 4. Floating Radiant Stardust Particles with Interactive Mouse Repulsion
+                    this.particles.forEach(p => {
+                        p.y += p.vy;
+                        p.x += p.vx + Math.sin(t * 0.75 + p.phase) * 0.28;
+                        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+                        if (p.x < -10) p.x = w + 10;
+                        if (p.x > w + 10) p.x = -10;
+
+                        const dx = mouse.x - p.x;
+                        const dy = mouse.y - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130 && dist > 0) {
+                            const force = (130 - dist) / 130 * 0.7;
+                            p.x -= (dx / dist) * force;
+                            p.y -= (dy / dist) * force;
+                        }
+
+                        const pAlpha = p.baseAlpha * (0.7 + Math.sin(t * p.pulseSpeed * 60 + p.phase) * 0.3);
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 230, 140, ${pAlpha})`;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.45)';
+                        ctx.shadowBlur = p.radius * 3.5;
+                        ctx.fill();
+                    });
+
+                    ctx.restore();
+                }
+            },
+
+            // SCENE 6 — CONTACT: "Luminous Champagne Constellation & Connectivity Stardust Network"
+            contact: {
+                glow: { x: '50%', y: '50%', color: 'rgba(212, 175, 55, 0.12)' },
+                init(w, h, isMobile) {
+                    const nodeCount = isMobile ? 28 : 52;
+                    this.nodes = Array.from({ length: nodeCount }, () => ({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        vx: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.55),
+                        vy: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.55),
+                        radius: Math.random() * 1.8 + 0.8,
+                        baseAlpha: Math.random() * 0.4 + 0.2,
+                        pulseSpeed: Math.random() * 0.03 + 0.015,
+                        phase: Math.random() * Math.PI * 2
+                    }));
+
+                    const sparkCount = isMobile ? 14 : 26;
+                    this.sparks = Array.from({ length: sparkCount }, () => ({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        vy: -(Math.random() * 0.6 + 0.3),
+                        vx: (Math.random() - 0.5) * 0.3,
+                        radius: Math.random() * 1.2 + 0.5,
+                        baseAlpha: Math.random() * 0.5 + 0.2,
+                        pulseSpeed: Math.random() * 0.04 + 0.02,
+                        phase: Math.random() * Math.PI * 2
+                    }));
+                },
+                render(ctx, w, h, t, alpha, mouse) {
+                    if (alpha <= 0.001) return;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    // 1. Soft Central Champagne Ambient Glow Aura
+                    const maxR = Math.max(w, h) * 0.55;
+                    const centerGlow = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, maxR);
+                    centerGlow.addColorStop(0, 'rgba(212, 175, 55, 0.09)');
+                    centerGlow.addColorStop(0.5, 'rgba(212, 175, 55, 0.025)');
+                    centerGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    ctx.fillStyle = centerGlow;
+                    ctx.fillRect(0, 0, w, h);
+
+                    // 2. Update & Draw Constellation Nodes & Golden Connection Filaments
+                    const maxDist = w < 768 ? 110 : 155;
+                    const nodes = this.nodes || [];
+
+                    // Position update with gentle mouse repulsion
+                    nodes.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        if (p.x < 0) p.x = w;
+                        if (p.x > w) p.x = 0;
+                        if (p.y < 0) p.y = h;
+                        if (p.y > h) p.y = 0;
+
+                        const dx = mouse.x - p.x;
+                        const dy = mouse.y - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130 && dist > 0) {
+                            const force = (130 - dist) / 130 * 0.8;
+                            p.x -= (dx / dist) * force;
+                            p.y -= (dy / dist) * force;
+                        }
+                    });
+
+                    // Draw connection lines
+                    ctx.lineWidth = 0.8;
+                    for (let i = 0; i < nodes.length; i++) {
+                        for (let j = i + 1; j < nodes.length; j++) {
+                            const p1 = nodes[i];
+                            const p2 = nodes[j];
+                            const dx = p1.x - p2.x;
+                            const dy = p1.y - p2.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < maxDist) {
+                                const lineAlpha = (1 - dist / maxDist) * 0.22;
+                                ctx.beginPath();
+                                ctx.moveTo(p1.x, p1.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.strokeStyle = `rgba(212, 175, 55, ${lineAlpha})`;
+                                ctx.shadowColor = 'rgba(212, 175, 55, 0.2)';
+                                ctx.shadowBlur = 4;
+                                ctx.stroke();
+                            }
+                        }
+
+                        // Connect delicately to mouse cursor if within range
+                        const mdx = mouse.x - nodes[i].x;
+                        const mdy = mouse.y - nodes[i].y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < 140 && mdist > 0) {
+                            const mAlpha = (1 - mdist / 140) * 0.35;
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 235, 170, ${mAlpha})`;
+                            ctx.shadowColor = 'rgba(212, 175, 55, 0.4)';
+                            ctx.shadowBlur = 6;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Render node star points
+                    nodes.forEach(p => {
+                        const pulse = 0.7 + Math.sin(t * p.pulseSpeed * 60 + p.phase) * 0.3;
+                        const pAlpha = p.baseAlpha * pulse;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 235, 170, ${pAlpha})`;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
+                        ctx.shadowBlur = p.radius * 4;
+                        ctx.fill();
+                    });
+
+                    // 3. Upward Drifting Micro Sparks / Champagne Embers
+                    if (this.sparks) {
+                        this.sparks.forEach(s => {
+                            s.y += s.vy;
+                            s.x += s.vx + Math.sin(t * 0.8 + s.phase) * 0.3;
+                            if (s.y < 0) {
+                                s.y = h + 10;
+                                s.x = Math.random() * w;
+                            }
+                            if (s.x < 0) s.x = w;
+                            if (s.x > w) s.x = 0;
+
+                            const sAlpha = s.baseAlpha * (0.6 + Math.sin(t * s.pulseSpeed * 60 + s.phase) * 0.4);
+                            ctx.beginPath();
+                            ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(255, 225, 150, ${sAlpha})`;
+                            ctx.shadowColor = 'rgba(212, 175, 55, 0.6)';
+                            ctx.shadowBlur = s.radius * 3;
+                            ctx.fill();
+                        });
+                    }
+
+                    ctx.restore();
+                }
+            },
+
+            // SCENE 7 — SOCIAL / MODAL: "Concentric Orbiting Monogram Stardust Rings"
+            social: {
+                glow: { x: '50%', y: '50%', color: 'rgba(212, 175, 55, 0.09)' },
+                init(w, h, isMobile) {
+                    const count = isMobile ? 24 : 45;
+                    this.ringParticles = Array.from({ length: count }, (v, i) => ({
+                        ring: i % 3,
+                        angle: Math.random() * Math.PI * 2,
+                        speed: (0.005 + (i % 3) * 0.003) * (i % 2 === 0 ? 1 : -1),
+                        radius: Math.random() * 1.9 + 0.7,
+                        baseAlpha: Math.random() * 0.35 + 0.15,
+                        phase: Math.random() * Math.PI * 2
+                    }));
+                },
+                render(ctx, w, h, t, alpha, mouse) {
+                    if (alpha <= 0.001) return;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    const loops = 3;
+                    for (let l = 0; l < loops; l++) {
+                        ctx.beginPath();
+                        const phase = l * (Math.PI / 3);
+                        for (let s = 0; s <= 100; s++) {
+                            const u = (s / 100) * Math.PI * 2;
+                            const x = w * 0.5 + Math.sin(u * 2 + t * 0.35 + phase) * (w * 0.38);
+                            const y = h * 0.5 + Math.sin(u * 3 + t * 0.28 + phase) * (h * 0.28);
+                            if (s === 0) ctx.moveTo(x, y);
+                            else ctx.lineTo(x, y);
+                        }
+                        ctx.closePath();
+                        const ribGrad = ctx.createLinearGradient(0, 0, w, h);
+                        ribGrad.addColorStop(0, 'rgba(212, 175, 55, 0.05)');
+                        ribGrad.addColorStop(0.5, 'rgba(255, 235, 170, 0.25)');
+                        ribGrad.addColorStop(1, 'rgba(180, 140, 40, 0.05)');
+                        ctx.strokeStyle = ribGrad;
+                        ctx.lineWidth = 1.3;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.4)';
+                        ctx.shadowBlur = 10;
+                        ctx.stroke();
+                    }
+
+                    // Orbiting Stardust
+                    this.ringParticles.forEach(p => {
+                        p.angle += p.speed;
+                        const rX = w * (0.2 + p.ring * 0.1);
+                        const rY = h * (0.15 + p.ring * 0.08);
+                        let px = w * 0.5 + Math.cos(p.angle) * rX;
+                        let py = h * 0.5 + Math.sin(p.angle) * rY;
+
+                        const dx = mouse.x - px;
+                        const dy = mouse.y - py;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130 && dist > 0) {
+                            const force = (130 - dist) / 130 * 0.7;
+                            px -= (dx / dist) * force;
+                            py -= (dy / dist) * force;
+                        }
+
+                        const pAlpha = p.baseAlpha * (0.7 + Math.sin(t * 2 + p.phase) * 0.3);
+                        ctx.beginPath();
+                        ctx.arc(px, py, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 235, 170, ${pAlpha})`;
+                        ctx.shadowColor = 'rgba(212, 175, 55, 0.6)';
+                        ctx.shadowBlur = p.radius * 3.5;
+                        ctx.fill();
+                    });
+
+                    ctx.restore();
+                }
+            }
+        };
+
+        function setBackgroundScene(sceneKey) {
+            const validKey = backgroundScenes[sceneKey] ? sceneKey : 'home';
+            if (validKey === activeSceneKey && !prevSceneKey) return;
+
+            prevSceneKey = activeSceneKey;
+            activeSceneKey = validKey;
+            transitionStartTime = performance.now();
+
+            const videoLayer = document.getElementById('video-bg-layer');
+            const bgVideo = document.getElementById('bg-brand-video');
+            if (videoLayer) {
+                if (validKey === 'home' || validKey === 'services') {
+                    videoLayer.classList.add('active-video');
+                    if (bgVideo && bgVideo.paused) {
+                        bgVideo.play().catch(() => {});
+                    }
+                } else {
+                    videoLayer.classList.remove('active-video');
+                }
+            }
+
+            const glowConfig = backgroundScenes[validKey].glow || { x: '50%', y: '40%', color: 'rgba(212, 175, 55, 0.06)' };
+            const bgContainer = document.getElementById('dynamic-background');
+            if (bgContainer) {
+                bgContainer.style.setProperty('--glow-x', glowConfig.x);
+                bgContainer.style.setProperty('--glow-y', glowConfig.y);
+                bgContainer.style.setProperty('--glow-color', glowConfig.color);
+            }
+        }
+
+        let bgNeedsClear = true;
+
+        function resizeBackgroundEngine() {
+            if (!bgCanvas) return;
+            const rawW = window.innerWidth;
+            const rawH = window.innerHeight;
+            bgIsMobile = rawW < 768;
+            bgDpr = bgIsMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+            bgWidth = rawW;
+            bgHeight = rawH;
+
+            bgCanvas.width = Math.floor(rawW * bgDpr);
+            bgCanvas.height = Math.floor(rawH * bgDpr);
+            bgCanvas.style.width = rawW + 'px';
+            bgCanvas.style.height = rawH + 'px';
+
+            bgCtx = bgCanvas.getContext('2d', { alpha: true });
+            bgCtx.setTransform(bgDpr, 0, 0, bgDpr, 0, 0);
+            bgNeedsClear = true;
+
+            Object.keys(backgroundScenes).forEach(key => {
+                if (typeof backgroundScenes[key].init === 'function') {
+                    backgroundScenes[key].init(bgWidth, bgHeight, bgIsMobile);
+                }
+            });
+        }
+
+        function renderBackgroundEngine(now) {
+            requestAnimationFrame(renderBackgroundEngine);
+            if (!bgIsVisible || !bgCtx) return;
+
+            const delta = Math.min((now - bgLastTime) * 0.001, 0.1);
+            bgLastTime = now;
+
+            const hasActiveCanvas = activeSceneKey !== 'home' && activeSceneKey !== 'services';
+            const hasPrevCanvas = prevSceneKey && prevSceneKey !== 'home' && prevSceneKey !== 'services';
+
+            if (!hasActiveCanvas && !hasPrevCanvas) {
+                if (bgNeedsClear) {
+                    bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+                    bgNeedsClear = false;
+                }
+                return;
+            }
+            bgNeedsClear = true;
+
+            const speedMultiplier = bgReducedMotion ? 0.08 : 1.0;
+            bgEngineTime += delta * speedMultiplier;
+
+            if (isFinePointer) {
+                bgMouse.x += (bgMouse.targetX - bgMouse.x) * 0.08;
+                bgMouse.y += (bgMouse.targetY - bgMouse.y) * 0.08;
+            }
+
+            bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+
+            if (prevSceneKey && (now - transitionStartTime < SCENE_TRANSITION_DURATION)) {
+                const rawProgress = (now - transitionStartTime) / SCENE_TRANSITION_DURATION;
+                const eased = easeLuxury(rawProgress);
+
+                const outAlpha = Math.max(0, 1 - rawProgress / 0.7);
+                const inAlpha = Math.min(1, eased);
+
+                if (outAlpha > 0.001 && backgroundScenes[prevSceneKey]) {
+                    backgroundScenes[prevSceneKey].render(bgCtx, bgWidth, bgHeight, bgEngineTime, outAlpha, bgMouse);
+                }
+                if (inAlpha > 0.001 && backgroundScenes[activeSceneKey]) {
+                    backgroundScenes[activeSceneKey].render(bgCtx, bgWidth, bgHeight, bgEngineTime, inAlpha, bgMouse);
+                }
+            } else {
+                prevSceneKey = null;
+                if (backgroundScenes[activeSceneKey]) {
+                    backgroundScenes[activeSceneKey].render(bgCtx, bgWidth, bgHeight, bgEngineTime, 1.0, bgMouse);
+                }
+            }
+        }
+
+        // Initialize Engine
+        if (bgCanvas) {
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                if (resizeTimer) cancelAnimationFrame(resizeTimer);
+                resizeTimer = requestAnimationFrame(resizeBackgroundEngine);
+            }, { passive: true });
+
+            if (isFinePointer) {
+                window.addEventListener('mousemove', (e) => {
+                    bgMouse.targetX = e.clientX;
+                    bgMouse.targetY = e.clientY;
+                }, { passive: true });
+            }
+
+            document.addEventListener('visibilitychange', () => {
+                bgIsVisible = !document.hidden;
+                if (bgIsVisible) bgLastTime = performance.now();
+            });
+
+            resizeBackgroundEngine();
+            const bgVideo = document.getElementById('bg-brand-video');
+            if (bgVideo) bgVideo.play().catch(() => {});
+            requestAnimationFrame(renderBackgroundEngine);
+        }
+
+        // --- 9. SLIDING NAV INDICATOR & ROUTER CROSSFADE ---
+        function updateNavIndicator(targetId) {
+            const navUl = document.querySelector('nav ul');
+            if (!navUl) return;
+            let indicator = navUl.querySelector('.nav-indicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.className = 'nav-indicator';
+                navUl.appendChild(indicator);
+            }
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            const activeLink = Array.from(document.querySelectorAll('nav a')).find(l => l.getAttribute('href') === targetId) || document.querySelector('nav a[href="#home"]');
+            if (activeLink) {
+                activeLink.classList.add('active');
+                const linkRect = activeLink.getBoundingClientRect();
+                const ulRect = navUl.getBoundingClientRect();
+                indicator.style.width = `${linkRect.width}px`;
+                indicator.style.left = `${linkRect.left - ulRect.left}px`;
+            }
+        }
+
+        let isNavigating = false;
+        let currentSectionKey = 'home';
+
+        function showSingleSection(targetId) {
+            if (!targetId || !targetId.startsWith('#') || isNavigating) return;
+            const targetSection = document.querySelector(targetId);
+            if (!targetSection) return;
+
+            const sceneKey = targetId.replace('#', '') || 'home';
+            currentSectionKey = sceneKey;
+            setBackgroundScene(sceneKey);
+            updateNavIndicator(targetId);
+
+            const activeSections = Array.from(document.querySelectorAll('section')).filter(s => getComputedStyle(s).display !== 'none');
+            
+            if (activeSections.length > 0 && activeSections[0] !== targetSection) {
+                isNavigating = true;
+                const currentSec = activeSections[0];
+                
+                currentSec.style.opacity = '0';
+                currentSec.style.transform = 'translateY(15px)';
+
+                setTimeout(() => {
+                    document.querySelectorAll('section').forEach(sec => {
+                        sec.style.display = 'none';
+                        sec.style.opacity = '0';
+                        sec.style.transform = 'translateY(25px)';
+                    });
+
+                    targetSection.style.display = 'flex';
+                    void targetSection.offsetWidth; // force reflow
+                    
+                    targetSection.style.opacity = '1';
+                    targetSection.style.transform = 'translateY(0)';
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    targetSection.querySelectorAll('.fade-in-up, .slide-from-right, .animate-words, .shimmer-title, .service-card, .tilt-card, .stagger-title').forEach(el => {
+                        el.classList.add('visible');
+                    });
+
+                    setTimeout(() => { isNavigating = false; }, 400);
+                }, 350);
+            } else {
+                targetSection.style.display = 'flex';
+                targetSection.style.opacity = '1';
+                targetSection.style.transform = 'translateY(0)';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function closeMobileNav() {
+            const nav = document.getElementById('main-nav');
+            const toggle = document.getElementById('mobile-menu-toggle');
+            if (nav) nav.classList.remove('mobile-active');
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        const mobileNavToggle = document.getElementById('mobile-menu-toggle');
+        const mainNavEl = document.getElementById('main-nav');
+        if (mobileNavToggle && mainNavEl) {
+            mobileNavToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = mainNavEl.classList.toggle('mobile-active');
+                mobileNavToggle.classList.toggle('active', isOpen);
+                mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('header')) {
+                    closeMobileNav();
+                }
+            });
+        }
+
+        document.querySelectorAll('.nav-reveal, nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (
+                    targetId &&
+                    targetId.startsWith('#') &&
+                    !this.classList.contains('about-fz-link')
+                ) {
+                    e.preventDefault();
+                    closeMobileNav();
+                    showSingleSection(targetId);
+                }
+            });
+        });
+
+        // Direct explicit handler for ABOUT FZ ↗ navigation
+        document.querySelectorAll('.about-fz-link').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeMobileNav();
+                window.location.href = 'about-fz.html';
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            const activeLink = document.querySelector('nav a.active');
+            if (activeLink) updateNavIndicator(activeLink.getAttribute('href'));
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.getAttribute('data-filter');
+                document.querySelectorAll('.portfolio-item').forEach(item => {
+                    item.style.display = (cat === 'all' || item.getAttribute('data-category') === cat) ? 'block' : 'none';
+                    item.style.opacity = '1';
+                    item.style.transform = '';
+                });
+            });
+        });
+
+        // --- 8. AUTHORITATIVE MODAL & OVERLAY CONTROLLERS ---
+        
+        // A. Contact / Inquiry Overlay
+        const contactOverlay = document.getElementById('contact-overlay');
+        const contactOverlayContent = document.getElementById('contact-overlay-content');
+        const quoteDisplay = document.getElementById('quote-display');
+        const luxuryQuotes = [ "“Design is silent ambassador.”", "“Simplicity is ultimate sophistication.”", "“Every brand has a soul.”" ];
+        const closeContactBtn = document.getElementById('contact-overlay-close') || document.getElementById('close-contact-btn') || document.querySelector('.contact-overlay-close') || document.querySelector('.close-contact');
+        let isContactOverlayTransitioning = false;
+
+        function openContactOverlay(e) {
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (!contactOverlay) return;
+            
+            isContactOverlayTransitioning = false;
+            if (typeof setBackgroundScene === 'function') {
+                setBackgroundScene('social');
+            }
+            if (quoteDisplay && Array.isArray(luxuryQuotes) && luxuryQuotes.length > 0) {
+                quoteDisplay.innerText = luxuryQuotes[Math.floor(Math.random() * luxuryQuotes.length)];
+            }
+            
+            contactOverlay.style.display = 'flex';
+            contactOverlay.style.pointerEvents = 'auto';
+            void contactOverlay.offsetWidth; // force browser reflow
+            contactOverlay.style.transition = 'opacity 0.35s ease';
+            contactOverlay.style.opacity = '1';
+        }
+
+        function closeContactOverlay(e) {
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (!contactOverlay || isContactOverlayTransitioning) return;
+            
+            isContactOverlayTransitioning = true;
+            // 1. disable pointer interaction immediately
+            contactOverlay.style.pointerEvents = 'none';
+            // 2. animate opacity out
+            contactOverlay.style.transition = 'opacity 0.3s ease';
+            contactOverlay.style.opacity = '0';
+            // 3. after transition, set display: none & restore scene
+            setTimeout(() => {
+                contactOverlay.style.display = 'none';
+                isContactOverlayTransitioning = false;
+                if (typeof setBackgroundScene === 'function') {
+                    setBackgroundScene(currentSectionKey || 'home');
+                }
+            }, 300);
+        }
+
+        // B. Portfolio Preview Modal
+        const adModal = document.getElementById('ad-modal');
+        const adImg = document.getElementById('ad-img');
+        const adTitle = document.getElementById('ad-title');
+        const adSubtitle = document.getElementById('ad-subtitle');
+        const closeAdModalBtn = document.getElementById('close-portfolio-btn') || document.querySelector('#ad-modal .close-modal');
+
+        function openPortfolioModal(item) {
+            if (!adModal) return;
+            const rawBg = item ? (item.style.backgroundImage || '') : '';
+            const imgUrl = rawBg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+            const titleEl = item ? item.querySelector('h3') : null;
+            const subtitleEl = item ? item.querySelector('p') : null;
+
+            if (adImg) adImg.src = imgUrl;
+            if (adTitle) adTitle.innerText = titleEl ? titleEl.innerText : '';
+            if (adSubtitle) adSubtitle.innerText = subtitleEl ? subtitleEl.innerText : '';
+
+            adModal.style.display = 'flex';
+            adModal.style.pointerEvents = 'auto';
+            adModal.style.opacity = '1';
+            adModal.classList.add('open');
+        }
+
+        function closePortfolioModal(e) {
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (!adModal) return;
+            adModal.style.pointerEvents = 'none';
+            adModal.style.opacity = '0';
+            adModal.classList.remove('open');
+            setTimeout(() => {
+                adModal.style.display = 'none';
+                if (adImg) adImg.src = '';
+            }, 300);
+        }
+
+        // C. Live Demo Viewer Modal
+        const demoModal = document.getElementById('demo-modal');
+        const closeDemoBtn = document.getElementById('demo-close-btn') || document.getElementById('close-demo-btn') || document.querySelector('.close-demo');
+        const demoIframe = document.getElementById('demo-iframe');
+        const demoLoader = document.getElementById('demo-loader');
+        const demoLoaderBtn = document.getElementById('demo-loader-btn');
+
+        function openDemoModal(url, title, desc) {
+            if (!demoModal) return;
+            const demoTitleEl = document.getElementById('demo-title');
+            const demoDescEl = document.getElementById('demo-desc');
+            const demoUrlBarEl = document.getElementById('demo-url-bar');
+            const demoLiveBtnEl = document.getElementById('demo-live-btn');
+
+            if (demoTitleEl) demoTitleEl.innerText = title || '';
+            if (demoDescEl) demoDescEl.innerText = desc || '';
+            if (demoUrlBarEl) demoUrlBarEl.innerText = url || '';
+            if (demoLiveBtnEl) demoLiveBtnEl.href = url || '#';
+            if (demoLoaderBtn) demoLoaderBtn.href = url || '#';
+
+            if (demoLoader) {
+                demoLoader.style.display = 'flex';
+                demoLoader.style.opacity = '1';
+            }
+            if (demoIframe) demoIframe.src = url || 'about:blank';
+
+            demoModal.style.display = 'flex';
+            demoModal.style.pointerEvents = 'auto';
+            demoModal.style.opacity = '1';
+            demoModal.classList.add('open');
+        }
+
+        function closeDemoModal(e) {
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (!demoModal) return;
+            demoModal.style.pointerEvents = 'none';
+            demoModal.style.opacity = '0';
+            demoModal.classList.remove('open');
+            setTimeout(() => {
+                demoModal.style.display = 'none';
+                if (demoIframe) demoIframe.src = 'about:blank';
+                if (demoLoader) {
+                    demoLoader.style.display = 'flex';
+                    demoLoader.style.opacity = '1';
+                }
+            }, 350);
+        }
+
+        // Global exports for accessibility and backwards compatibility
+        window.openContactOverlay = openContactOverlay;
+        window.closeContactOverlay = closeContactOverlay;
+        window.openContactModal = openContactOverlay;
+        window.closeContactModal = closeContactOverlay;
+        window.openPortfolioModal = openPortfolioModal;
+        window.closePortfolioModal = closePortfolioModal;
+        window.openDemoModal = openDemoModal;
+        window.closeDemoModal = closeDemoModal;
+
+        // Attach listeners using addEventListener
+
+        // 1. .open-social-trigger buttons -> Open Contact / Inquiry Overlay
+        document.querySelectorAll('.open-social-trigger').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                openContactOverlay(event);
+            });
+        });
+
+        // 3. Contact Overlay Close Button
+        if (closeContactBtn) {
+            closeContactBtn.addEventListener('click', closeContactOverlay);
+        }
+        document.querySelectorAll('#contact-overlay-close, .contact-overlay-close, .close-contact, #close-contact-btn').forEach(btn => {
+            if (btn !== closeContactBtn) {
+                btn.addEventListener('click', closeContactOverlay);
+            }
+        });
+
+        // 4. Contact Overlay Backdrop Click (Do NOT close when clicking content)
+        if (contactOverlay) {
+            contactOverlay.addEventListener('click', (e) => {
+                if (e.target === contactOverlay) {
+                    closeContactOverlay(e);
+                }
+            });
+        }
+        if (contactOverlayContent) {
+            contactOverlayContent.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // 5. Portfolio Items & Close Button
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                openPortfolioModal(this);
+            });
+            item.addEventListener('touchend', function() {
+                openPortfolioModal(this);
+            }, { passive: true });
+        });
+        if (closeAdModalBtn) {
+            closeAdModalBtn.addEventListener('click', closePortfolioModal);
+        }
+        if (adModal) {
+            adModal.addEventListener('click', (e) => {
+                if (e.target === adModal) {
+                    closePortfolioModal(e);
+                }
+            });
+        }
+        const adModalContent = document.getElementById('ad-modal-content');
+        if (adModalContent) {
+            adModalContent.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // 6. Live Demo Cards & Close Button
+        if (demoIframe) {
+            demoIframe.addEventListener('load', function() {
+                if (demoLoader && demoIframe.src && demoIframe.src !== 'about:blank' && !demoIframe.src.endsWith('#')) {
+                    demoLoader.style.opacity = '0';
+                    setTimeout(() => { demoLoader.style.display = 'none'; }, 500);
+                }
+            });
+        }
+        document.querySelectorAll('.web-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-demo-url');
+                const title = this.getAttribute('data-demo-title');
+                const desc = this.getAttribute('data-demo-desc');
+                openDemoModal(url, title, desc);
+            });
+            card.addEventListener('touchend', function() {
+                const url = this.getAttribute('data-demo-url');
+                const title = this.getAttribute('data-demo-title');
+                const desc = this.getAttribute('data-demo-desc');
+                openDemoModal(url, title, desc);
+            }, { passive: true });
+        });
+        const closeDemo = document.querySelector('.close-demo');
+        if (closeDemo) {
+            closeDemo.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeDemoModal();
+            });
+        }
+        document.querySelectorAll('#demo-close-btn, .close-demo, #close-demo-btn, .close-demo-inline').forEach(btn => {
+            btn.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeDemoModal();
+            });
+        });
+        if (demoModal) {
+            demoModal.addEventListener('click', function(event) {
+                if (event.target === demoModal) {
+                    closeDemoModal();
+                }
+            });
+        }
+        const demoModalContent = document.getElementById('demo-modal-content');
+        if (demoModalContent) {
+            demoModalContent.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        }
+
+        // 7. Global Keyboard Escape Handler
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContactOverlay(e);
+                closePortfolioModal(e);
+                closeDemoModal(e);
+            }
+        });
+
+        // --- 10. COPY TO CLIPBOARD FUNCTION ---
+        function copyEmail(element) {
+            const email = "brandtouchfz@gmail.com";
+            const targetEl = element || document.getElementById('contact-overlay-copy-trigger') || document.querySelector('.copy-trigger');
+            const showFeedback = () => {
+                if (!targetEl) return;
+                targetEl.classList.add('copied');
+                setTimeout(() => {
+                    targetEl.classList.remove('copied');
+                }, 2000);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(email).then(showFeedback).catch(() => {
+                    fallbackCopyEmail(email, showFeedback);
+                });
+            } else {
+                fallbackCopyEmail(email, showFeedback);
+            }
+        }
+
+        function fallbackCopyEmail(text, callback) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (typeof callback === 'function') callback();
+            } catch (err) {}
+            document.body.removeChild(textArea);
+        }
+
+        window.copyEmail = copyEmail;
+
+        document.querySelectorAll('.copy-trigger').forEach(trigger => {
+            trigger.addEventListener('click', function() {
+                copyEmail(this);
+            });
+        });
+
+        // --- 11. PROJECT SELECTOR LOGIC ---
+        function selectProject(btn, type) {
+            document.querySelectorAll('.project-tag').forEach(tag => tag.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const ctaBtn = document.getElementById('hire-cta-btn');
+            if (ctaBtn) ctaBtn.innerText = `Start My ${type}`;
+        }
+        window.selectProject = selectProject;
+
+                                                // --- 13. FZ ASSISTANT — SERVICES & PRICING ASSISTANT ---
+        const chatWidget = document.getElementById('chat-widget');
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChat = document.getElementById('close-chat');
+        const sendBtn = document.getElementById('send-chat');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const chatUnreadBadge = document.getElementById('chat-unread-badge');
+        const chatResetBtn = document.getElementById('chat-reset-btn');
+
+        let isGenerating = false;
+        let hasInitializedGreeting = false;
+
+        // Authoritative Single Source of Truth Service & Pricing Reference Catalog
+        const serviceCatalog = {
+            menu: {
+                name: 'Menu Card Design',
+                price: '₹299 – ₹599',
+                detail: 'Professional menu card design for print and digital use.'
+            },
+            business: {
+                name: 'Business Card Design',
+                price: '₹199 – ₹399',
+                detail: 'Clean and premium business card design.'
+            },
+            poster: {
+                name: 'Posters & Ads',
+                price: '₹299 – ₹699',
+                detail: 'Creative poster and advertising designs for digital and print.'
+            },
+            brochure: {
+                name: 'Brochure Design',
+                price: '₹499 – ₹999',
+                detail: 'Professional brochure layouts and visual presentation.'
+            },
+            website: {
+                name: 'Web Design',
+                price: '₹799 / page',
+                detail: 'Responsive, modern websites tailored to the brand.'
+            },
+            logo: {
+                name: 'Logo Design',
+                price: '₹299 – ₹699',
+                detail: 'Custom logo and brand-mark design.'
+            },
+            brand: {
+                name: 'Brand Identity Bundle',
+                price: '₹999 – ₹1,999',
+                detail: 'Complete brand identity package.'
+            }
+        };
+
+        const initialSuggestions = [
+            { label: '🎨 Explore Services', type: 'action' },
+            { label: '💰 View Pricing', type: 'action' }
+        ];
+
+        // Audio Chime Feedback Disabled
+        function playChime() {}
+
+        function getCurrentTimeStr() {
+            const d = new Date();
+            let hours = d.getHours();
+            const minutes = d.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            const strMinutes = minutes < 10 ? '0' + minutes : minutes;
+            return `${hours}:${strMinutes} ${ampm}`;
+        }
+
+        function getTimeGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Good morning ✦";
+            if (hour < 18) return "Good afternoon ✦";
+            return "Good evening ✦";
+        }
+
+        function scrollChatToBottom(smooth = true) {
+            if (!chatMessages) return;
+            try {
+                if (typeof chatMessages.scrollTo === 'function') {
+                    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+                } else {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            } catch (e) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        function appendMessage(content, sender = 'bot', suggestions = [], uiConfig = {}) {
+            if (!chatMessages) return;
+            const msg = document.createElement('div');
+            msg.className = `message ${sender}-msg`;
+            
+            let html = typeof content === 'string' ? content : '';
+            
+            if (suggestions && suggestions.length > 0) {
+                html += `<div class="chat-followup-container">
+                    <span class="chat-followup-title">${uiConfig.title || 'Suggested Options'}</span>
+                    <div class="chat-followup-chips">
+                        ${suggestions.map((s, idx) => {
+                            const label = typeof s === 'string' ? s : s.label;
+                            const isPrimary = s.type === 'action' || s.isPrimary;
+                            const delayMs = (idx * 45) + (uiConfig.suggestionDelay || 0);
+                            return `<button class="chat-action-btn ${isPrimary ? 'btn-primary' : ''}" style="--chip-delay: ${delayMs}ms;" onclick="triggerChatQuery('${label.replace(/'/g, "\\'")}')">${label}</button>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+            }
+            html += `<span class="msg-time">${getCurrentTimeStr()}</span>`;
+            
+            msg.innerHTML = html;
+            
+            if (typingIndicator) {
+                chatMessages.insertBefore(msg, typingIndicator);
+            } else {
+                chatMessages.appendChild(msg);
+            }
+            scrollChatToBottom(true);
+            playChime(sender === 'user' ? 'send' : 'receive');
+        }
+
+        // Staged Greeting Sequence on First Open / Reset
+        function runStagedGreeting() {
+            if (!chatMessages) return;
+            chatMessages.innerHTML = '';
+            if (typingIndicator) chatMessages.appendChild(typingIndicator);
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const timeGreeting = getTimeGreeting();
+
+            if (reducedMotion) {
+                appendMessage(`
+                    <span class="chat-tag">FZ ASSISTANT</span>
+                    <div>${timeGreeting} I'm <strong>FZ Assistant</strong> for <strong>The Brand Touch</strong> ✦<br><br>I can help you with our creative design services and transparent pricing. What would you like to explore today?</div>
+                `, 'bot', initialSuggestions);
+                hasInitializedGreeting = true;
+                return;
+            }
+
+            appendMessage(`${timeGreeting}`, 'bot', []);
+            setTimeout(() => {
+                appendMessage(`I'm <strong>FZ Assistant</strong> for <strong>The Brand Touch</strong>.`, 'bot', []);
+                setTimeout(() => {
+                    appendMessage(`
+                        <div>Ask me about our creative design services or pricing ✦<br><br>How can I help you today?</div>
+                    `, 'bot', initialSuggestions, { suggestionDelay: 250 });
+                    hasInitializedGreeting = true;
+                }, 350);
+            }, 300);
+        }
+
+        function openFZAssistant() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatWidget = document.getElementById('chat-widget');
+
+            if (!chatWindow) return;
+
+            if (chatWidget) {
+                chatWidget.style.display = 'flex';
+                chatWidget.style.visibility = 'visible';
+            }
+
+            chatWindow.classList.add('open');
+
+            const unreadBadge = document.getElementById('chat-unread-badge');
+            if (unreadBadge) {
+                unreadBadge.style.display = 'none';
+            }
+
+            if (!hasInitializedGreeting) {
+                runStagedGreeting();
+            }
+
+            setTimeout(() => {
+                const input = document.getElementById('chat-input');
+                if (input) input.focus();
+            }, 350);
+        }
+
+        window.openFZAssistant = openFZAssistant;
+
+        // Toggle Chatbot Window
+        if (chatBubble) {
+            chatBubble.addEventListener('click', () => {
+                if (chatWindow && chatWindow.classList.contains('open')) {
+                    chatWindow.classList.remove('open');
+                } else {
+                    window.openFZAssistant();
+                }
+            });
+        }
+
+        if (closeChat) {
+            closeChat.addEventListener('click', () => {
+                if (chatWindow) chatWindow.classList.remove('open');
+            });
+        }
+
+        // Global Helper for Triggering Pre-set Chat Queries
+        window.triggerChatQuery = function(queryText) {
+            if (!queryText || isGenerating) return;
+            if (chatWindow && !chatWindow.classList.contains('open')) {
+                chatWindow.classList.add('open');
+                if (chatUnreadBadge) chatUnreadBadge.style.display = 'none';
+            }
+            if (chatInput) {
+                chatInput.value = queryText;
+                handleUserChatSubmit();
+            }
+        };
+
+        // Global Helper for Navigation from Chatbot
+        window.navigateToSection = function(sectionId) {
+            if (chatWindow) chatWindow.classList.remove('open');
+            const link = document.querySelector(`nav a[href="${sectionId}"]`);
+            if (link) link.click();
+            else {
+                const el = document.querySelector(sectionId);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        function calculateResponseDelay(text) {
+            const length = (text || '').length;
+            const base = 250;
+            const extra = Math.min(length * 3, 350);
+            return base + extra;
+        }
+
+        // Process Queries & Return Structured Responses with Suggestions
+        function processFZAssistantQuery(rawInput) {
+            if (!rawInput || typeof rawInput !== 'string') {
+                return {
+                    response: "I'm FZ Assistant for The Brand Touch. I can help with our services and pricing. ✦",
+                    suggestions: initialSuggestions
+                };
+            }
+
+            const text = rawInput.toLowerCase().trim();
+            const cleanText = text
+                .replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}✦✨🍽️💳🖼️🌐📄📢📱🎬⌚🏎️✉️📋✍️💬⚡📅⏳🖤🤍📦💰📁🚀🛍️💼⚙️]+\s*/gu, '')
+                .trim();
+
+            // 1. Restart / Reset
+            if (cleanText === 'restart' || cleanText === 'reset' || cleanText === 'start over' || cleanText === 'clear chat') {
+                return {
+                    response: "Hello! I am <strong>FZ Assistant</strong> for <strong>The Brand Touch</strong> ✦ Ask me about our creative design services or transparent pricing.",
+                    suggestions: initialSuggestions
+                };
+            }
+
+            // 2. Greetings
+            if (['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'].includes(cleanText)) {
+                return {
+                    response: `Hello! I am <strong>FZ Assistant</strong> for <strong>The Brand Touch</strong> ✦ How can I help you with our design services or pricing today?`,
+                    suggestions: initialSuggestions
+                };
+            }
+
+            // 3. Studio Info / Portfolio / Live Websites / Contact / Designer
+            if (cleanText.includes('portfolio') || cleanText.includes('sample') || cleanText.includes('work samples') || cleanText.includes('client work')) {
+                return {
+                    response: `Our portfolio features curated client work across Menu Cards (Bakers Point, Shawarma Menu), Posters (AirPods Pro, Chanel N°5, Nike Air Force 1, Blue Lady), Brochures, Business Cards, and Web Platforms. ✦`,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' }
+                    ]
+                };
+            }
+
+            if (cleanText.includes('what websites') || cleanText.includes('websites have you built') || cleanText.includes('show me your websites') || cleanText.includes('live platform') || cleanText.includes('live website')) {
+                return {
+                    response: `Our live web platforms include <strong>AuraFaz Fragrance Hub</strong>, <strong>ÉLVARA Timepieces</strong>, and the <strong>Porsche 911 GT3 Viewport</strong>. ✦`,
+                    suggestions: [
+                        { label: '🌐 Web Development', type: 'service' },
+                        { label: '💰 View Pricing', type: 'action' }
+                    ]
+                };
+            }
+
+            if (cleanText.includes('contact') || cleanText.includes('email') || cleanText.includes('instagram') || cleanText.includes('reach you') || cleanText.includes('get in touch')) {
+                return {
+                    response: `You can contact The Brand Touch directly at <code>brandtouchfz@gmail.com</code> or via Instagram at <strong>@thefz.brandtouch._</strong>. ✦`,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' }
+                    ]
+                };
+            }
+
+            if (cleanText.includes('who is the designer') || cleanText.includes('who runs') || cleanText.includes('about faseeha') || cleanText.includes('about designer') || cleanText.includes('who is faseeha')) {
+                return {
+                    response: `The Brand Touch is the creative studio of <strong>Faseeha Zulaika N</strong>, specializing in graphic design and web development. ✦`,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' }
+                    ]
+                };
+            }
+
+            // 4. Out-of-Scope Questions Guard
+            const isOutOfScope = (
+                cleanText.includes('python') || cleanText.includes('javascript code') || cleanText.includes('c++') || cleanText.includes('java code') ||
+                cleanText.includes('recipe') || cleanText.includes('cook') || cleanText.includes('weather') || cleanText.includes('capital of') ||
+                cleanText.includes('president') || cleanText.includes('prime minister') || cleanText.includes('politics') ||
+                cleanText.includes('translate ') || cleanText.includes('solve ') || cleanText.includes('calculate ') || cleanText.includes('2+2') || cleanText.includes('2 + 2') ||
+                cleanText.includes('elon musk') || cleanText.includes('who won') ||
+                cleanText.includes('tell me a joke') || cleanText.includes('tell me a story') || cleanText.includes('write a poem') ||
+                cleanText.includes('crypto') || cleanText.includes('bitcoin') || cleanText.includes('stock market')
+            );
+
+            if (isOutOfScope) {
+                return {
+                    response: "I'm FZ Assistant for The Brand Touch. I can help with our services and pricing. ✦",
+                    suggestions: initialSuggestions
+                };
+            }
+
+            // 5. Unsupported / Unlisted Services Guard
+            const unlistedKeywords = [
+                'packaging', 'ecommerce', 'e-commerce', 'online store', 'thumbnail', 'flyer', 
+                'seo', 'mobile app', 'app dev', 'copywriting', 'video editing', 'video edit'
+            ];
+            if (unlistedKeywords.some(kw => cleanText.includes(kw))) {
+                return {
+                    response: "That service isn't listed in the current The Brand Touch service catalog. I can help with our available design services and pricing. ✦",
+                    suggestions: initialSuggestions
+                };
+            }
+
+            // 6. General Services Overview
+            if (cleanText === 'services' || cleanText === 'explore services' || cleanText === 'explore all services' || 
+                (cleanText.includes('service') && (cleanText.includes('what') || cleanText.includes('offer') || cleanText.includes('provide') || cleanText.includes('list') || cleanText.includes('all'))) || 
+                cleanText === 'what do you offer' || cleanText === 'what do you do' || cleanText === 'what do you specialize in' || cleanText === 'what do you make' || cleanText.includes('what do you offer') || cleanText.includes('what do you make')) {
+                return {
+                    response: `
+                        <span class="chat-tag">✦ STUDIO SERVICES</span>
+                        <div class="chat-services-intro">Here are the bespoke design & web services crafted at <strong>The Brand Touch</strong>:</div>
+                        <div class="chat-services-container">
+                            <div class="chat-service-card" onclick="triggerChatQuery('Menu Card Design')">
+                                <span class="chat-service-icon">🍽️</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.menu.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.menu.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Business Card Design')">
+                                <span class="chat-service-icon">💳</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.business.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.business.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Posters & Ads')">
+                                <span class="chat-service-icon">🖼️</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.poster.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.poster.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Brochure Design')">
+                                <span class="chat-service-icon">📄</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.brochure.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.brochure.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Web Development')">
+                                <span class="chat-service-icon">🌐</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.website.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.website.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Logo Design')">
+                                <span class="chat-service-icon">✦</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.logo.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.logo.detail}</p>
+                                </div>
+                            </div>
+                            <div class="chat-service-card" onclick="triggerChatQuery('Brand Identity Bundle')">
+                                <span class="chat-service-icon">⚜️</span>
+                                <div class="chat-service-content">
+                                    <div class="chat-service-name">${serviceCatalog.brand.name} <span class="service-arrow">↗</span></div>
+                                    <p class="chat-service-desc">${serviceCatalog.brand.detail}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    suggestions: [
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '🍽️ Menu Card Design', type: 'service' },
+                        { label: '💳 Business Card Design', type: 'service' },
+                        { label: '🖼️ Posters & Ads', type: 'service' },
+                        { label: '📄 Brochure Design', type: 'service' },
+                        { label: '🌐 Web Development', type: 'service' },
+                        { label: '✦ Logo Design', type: 'service' },
+                        { label: '✦ Brand Identity', type: 'service' }
+                    ]
+                };
+            }
+
+            // 7. Complete Pricing List / Table
+            if (cleanText === 'pricing' || cleanText === 'view pricing' || cleanText === 'view full pricing' || 
+                cleanText === 'price' || cleanText === 'cost' || cleanText === 'rate' || cleanText === 'rates' || 
+                cleanText === 'how much' || cleanText === 'what are your prices' || cleanText === 'prices' || 
+                cleanText === 'how much is everything' || cleanText === 'how much do you charge' || cleanText === 'price list' ||
+                cleanText.includes('full price') || cleanText.includes('all prices')) {
+                return {
+                    response: `
+                        <strong>TRANSPARENT STUDIO PRICING</strong>
+                        <table class="price-table">
+                            <tr><td>${serviceCatalog.menu.name}</td><td>${serviceCatalog.menu.price}</td></tr>
+                            <tr><td>${serviceCatalog.business.name}</td><td>${serviceCatalog.business.price}</td></tr>
+                            <tr><td>${serviceCatalog.poster.name}</td><td>${serviceCatalog.poster.price}</td></tr>
+                            <tr><td>${serviceCatalog.brochure.name}</td><td>${serviceCatalog.brochure.price}</td></tr>
+                            <tr><td>${serviceCatalog.website.name}</td><td>${serviceCatalog.website.price}</td></tr>
+                            <tr><td>${serviceCatalog.logo.name}</td><td>${serviceCatalog.logo.price}</td></tr>
+                            <tr><td>${serviceCatalog.brand.name}</td><td>${serviceCatalog.brand.price}</td></tr>
+                        </table>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '🍽️ Menu Card Design', type: 'service' },
+                        { label: '💳 Business Card Design', type: 'service' },
+                        { label: '🖼️ Posters & Ads', type: 'service' },
+                        { label: '🌐 Web Development', type: 'service' }
+                    ]
+                };
+            }
+
+            // 8. Individual Service & Price Lookups
+            // Menu Card Design
+            if (cleanText.includes('menu')) {
+                return {
+                    response: `
+                        <strong>MENU CARD DESIGN ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.menu.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '💳 Business Card Design', type: 'service' },
+                        { label: '🖼️ Posters & Ads', type: 'service' }
+                    ]
+                };
+            }
+
+            // Business Card Design
+            if (cleanText.includes('business card') || cleanText.includes('visiting card') || cleanText === 'card' || cleanText === 'cards') {
+                return {
+                    response: `
+                        <strong>BUSINESS CARD DESIGN ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.business.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '✦ Logo Design', type: 'service' },
+                        { label: '✦ Brand Identity', type: 'service' }
+                    ]
+                };
+            }
+
+            // Posters & Ads
+            if (cleanText.includes('poster') || cleanText.includes('ad design') || cleanText.includes('ads') || cleanText.includes('advertisement')) {
+                return {
+                    response: `
+                        <strong>POSTERS & ADS ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.poster.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '📄 Brochure Design', type: 'service' },
+                        { label: '🍽️ Menu Card Design', type: 'service' }
+                    ]
+                };
+            }
+
+            // Brochure Design
+            if (cleanText.includes('brochure') || cleanText.includes('catalog')) {
+                return {
+                    response: `
+                        <strong>BROCHURE DESIGN ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.brochure.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '🖼️ Posters & Ads', type: 'service' },
+                        { label: '💳 Business Card Design', type: 'service' }
+                    ]
+                };
+            }
+
+            // Web Development
+            if (cleanText.includes('website') || cleanText.includes('web dev') || cleanText.includes('web development') || cleanText === 'web' || cleanText.includes('landing page')) {
+                return {
+                    response: `
+                        <strong>WEB DEVELOPMENT ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.website.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '✦ Brand Identity', type: 'service' },
+                        { label: '✦ Logo Design', type: 'service' }
+                    ]
+                };
+            }
+
+            // Logo Design
+            if (cleanText.includes('logo') || cleanText.includes('brand mark')) {
+                return {
+                    response: `
+                        <strong>LOGO DESIGN ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.logo.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '✦ Brand Identity', type: 'service' },
+                        { label: '💳 Business Card Design', type: 'service' }
+                    ]
+                };
+            }
+
+            // Brand Identity Bundle
+            if (cleanText.includes('brand identity') || cleanText.includes('branding') || cleanText.includes('brand bundle') || cleanText === 'brand') {
+                return {
+                    response: `
+                        <strong>BRAND IDENTITY BUNDLE ✦</strong><br><br>
+                        Price Range: <span style="color:var(--gold); font-weight:600;">${serviceCatalog.brand.price}</span>
+                    `,
+                    suggestions: [
+                        { label: '🎨 Explore Services', type: 'action' },
+                        { label: '💰 View Pricing', type: 'action' },
+                        { label: '✦ Logo Design', type: 'service' },
+                        { label: '🌐 Web Development', type: 'service' }
+                    ]
+                };
+            }
+
+            // 9. Default Fallback
+            return {
+                response: "I'm FZ Assistant for The Brand Touch. I can help with our services and pricing. ✦",
+                suggestions: initialSuggestions
+            };
+        }
+
+        function handleUserChatSubmit() {
+            if (!chatInput || isGenerating) return;
+            const rawVal = chatInput.value;
+            const inputLower = rawVal.trim();
+            if (!inputLower) return;
+
+            chatInput.value = '';
+            appendMessage(rawVal, 'user');
+            
+            isGenerating = true;
+            if (sendBtn) sendBtn.disabled = true;
+            if (typingIndicator) typingIndicator.classList.add('active');
+            scrollChatToBottom(true);
+
+            const result = processFZAssistantQuery(inputLower);
+            const delay = calculateResponseDelay(result.response);
+
+            setTimeout(() => {
+                if (typingIndicator) typingIndicator.classList.remove('active');
+                appendMessage(result.response, 'bot', result.suggestions || [], { suggestionDelay: 150 });
+                isGenerating = false;
+                if (sendBtn) sendBtn.disabled = false;
+                if (chatInput) chatInput.focus();
+            }, delay);
+        }
+
+        if (sendBtn) {
+            sendBtn.addEventListener('click', handleUserChatSubmit);
+        }
+        if (chatInput) {
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleUserChatSubmit();
+            });
+        }
+
+        if (chatResetBtn) {
+            chatResetBtn.addEventListener('click', () => {
+                isGenerating = false;
+                hasInitializedGreeting = false;
+                if (sendBtn) sendBtn.disabled = false;
+                if (chatInput) {
+                    chatInput.disabled = false;
+                    chatInput.value = '';
+                }
+                runStagedGreeting();
+            });
+        }
+
+        // Check for hash on arrival (e.g., from about-fz.html#portfolio)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash && document.querySelector(window.location.hash)) {
+                setTimeout(() => {
+                    if (typeof showSingleSection === 'function') {
+                        showSingleSection(window.location.hash);
+                    }
+                }, 150);
+            }
+        });
+    </script>
+</body>
+</html>
